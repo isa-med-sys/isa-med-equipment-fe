@@ -1,0 +1,34 @@
+<div>
+    <p>Equipment</p>
+    <hr>
+    <div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Rating</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let eq of equipment">
+                        <td>{{eq.name}}</td>
+                        <td>{{eq.description}}</td>
+                        <td>{{eq.type}}</td>
+                        <td>{{eq.rating}}</td>
+                        <td>{{eq.price}}</td>
+                        <td>
+                            <button color="accent" (click)="onShowCompanies(eq)" mat-icon-button>
+                                <mat-icon>show</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

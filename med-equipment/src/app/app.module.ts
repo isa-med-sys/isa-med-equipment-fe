@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './authentication/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
+import { HttpClientModule } from '@angular/common/http';
+import { MarketplaceModule } from './feature-modules/marketplace/marketplace.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { LayoutModule } from './layout/layout.module';
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
-    LayoutModule
+    LayoutModule,
+    HttpClientModule,
+    MarketplaceModule, //
   ],
   providers: [],
   bootstrap: [AppComponent]
