@@ -5,6 +5,9 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './authentication/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
+import { UserModule } from './feature-modules/user/user.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -15,9 +18,16 @@ import { LayoutModule } from './layout/layout.module';
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
-    LayoutModule
+    LayoutModule,
+    UserModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 
