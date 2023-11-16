@@ -9,12 +9,19 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent {
-  registrationSuccess = false;
+  isRegistrationSuccessful = false;
+  isButtonDisabled = true;
   registrationError = '';
+  passwordMessage = '';
 
-  constructor(
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
+  ngOnInit(): void {
+    this.registrationForm.statusChanges.subscribe(() => {
+      this.isButtonDisabled = !this.registrationForm.valid || !this.passwordsMatch();
+    });
+  }
+
+  passwordConfirmation = new FormControl('', [Validators.required]);
 
   registrationForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -31,7 +38,16 @@ export class RegistrationComponent {
       city: new FormControl('', [Validators.required]),
     }),
   });
+
+  passwordsMatch(): boolean {
+    const password = this.registrationForm.get('password')?.value;
+    const confirmPassword = this.passwordConfirmation.value;
   
+    this.passwordMessage = password === confirmPassword ? 'Passwords match' : 'Passwords do not match';
+  
+    return password === confirmPassword;
+  }
+
   register(): void {
     const registration: Registration = {
       name: this.registrationForm.value.name || '',
@@ -53,11 +69,11 @@ export class RegistrationComponent {
     if (this.registrationForm.valid) {
       this.authService.register(registration).subscribe({
         next: () => {
-          this.registrationSuccess = true;
+          this.isRegistrationSuccessful = true;
           this.registrationError = '';
         },
         error: () => {
-          this.registrationSuccess = false;
+          this.isRegistrationSuccessful = false;
           this.registrationError = 'An error occurred during registration.';
         }
       });
