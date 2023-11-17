@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Company } from "../../../shared/model/company";
 import { CompanyService } from "../company.service";
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-company-profile',
