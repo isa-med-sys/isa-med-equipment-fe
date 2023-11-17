@@ -4,12 +4,14 @@ import { LoginComponent } from 'src/app/authentication/login/login.component';
 import { RegistrationComponent } from 'src/app/authentication/registration/registration.component';
 import { UserProfileComponent } from 'src/app/feature-modules/user/user-profile/user-profile.component';
 import { HomeComponent } from 'src/app/layout/home/home.component';
+import { CompanyProfileComponent } from "../../feature-modules/company/company-profile/company-profile.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent }, 
+  { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'user/profile', component: UserProfileComponent },
+  { path: 'company/:id', component: CompanyProfileComponent }
 ];
 
 @NgModule({
@@ -17,6 +19,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class AppRoutingModule { 
-  
+export class AppRoutingModule {
+
 }
