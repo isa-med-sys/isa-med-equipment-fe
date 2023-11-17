@@ -2,8 +2,9 @@
     <div>
         <div id="buttons">
             <button *ngIf="user && user.email === ''" mat-raised-button color="accent" [routerLink]="['login']">Login</button>
-            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
+            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['user/profile']">Profile</button>
+            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
         </div>
     </div>
 </mat-toolbar>
