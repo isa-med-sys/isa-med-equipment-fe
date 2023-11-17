@@ -8,10 +8,12 @@ import { LayoutModule } from './layout/layout.module';
 import { UserModule } from './feature-modules/user/user.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
+import { CompanyProfileComponent } from './feature-modules/company/company-profile/company-profile.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CompanyProfileComponent
   ],
   imports: [
     BrowserModule,
