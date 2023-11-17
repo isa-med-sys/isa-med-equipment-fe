@@ -46,14 +46,19 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password"/>
         </mat-form-field>
-    <button color="primary" type="submit" mat-raised-button>Register</button>
+        <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input matInput [formControl]="passwordConfirmation" type="password" (input)="passwordsMatch()"/>
+        </mat-form-field>
+        <div [ngStyle]="{'color': passwordMessage === 'Passwords match' ? 'green' : 'red', 'margin-bottom': '30px'}">{{ passwordMessage }}</div>
+        <button color="primary" type="submit" mat-raised-button [disabled]="!registrationForm.valid || !passwordsMatch()">Register</button>
+        <div class="message-container">
+          <div *ngIf="registrationError" class="error-message">
+            {{ registrationError }}
+          </div>
+          <div *ngIf="isRegistrationSuccessful" class="success-message">
+            Registration successful! Check your email for the confirmation link.
+          </div>
+        </div>
     </div>
 </form>
-<div class="message-container">
-    <div *ngIf="registrationError" class="error-message">
-      {{ registrationError }}
-    </div>
-    <div *ngIf="registrationSuccess" class="success-message">
-      Registration successful! Check your email for the confirmation link.
-    </div>
-  </div>
