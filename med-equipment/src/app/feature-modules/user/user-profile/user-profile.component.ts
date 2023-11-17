@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { UserService } from '../user.service';
 import { take } from 'rxjs';
+import { AuthService } from 'src/app/authentication/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,28 +11,29 @@ import { take } from 'rxjs';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent {
-  
-  userId: number;
+
+  userId?: number;
   user!: RegisteredUser;
   userProfileForm!: FormGroup;
   isEditable: boolean = false;
   errorMessage: string = '';
 
-  constructor(private userService: UserService, private fb: FormBuilder) {
-    // TODO load from session storage
-    this.userId = 2;
+  constructor(private userService: UserService, private fb: FormBuilder, authService: AuthService) {
+    this.userId = authService.user$.value.id;
   }
 
   ngOnInit() {
-    this.userService.getRegisteredUser(this.userId).subscribe({
-      next: (user) => {
-        this.user = user;
-        this.initializeForm();
-      },
-      error: (err) => {
-        console.error('Error fetching user profile:', err);
-      },
-    });
+    if (this.userId) {
+      this.userService.getRegisteredUser(this.userId).subscribe({
+        next: (user) => {
+          this.user = user;
+          this.initializeForm();
+        },
+        error: (err) => {
+          console.error('Error fetching user profile:', err);
+        },
+      });
+    }
   }
 
   initializeForm() {
@@ -61,9 +63,9 @@ export class UserProfileComponent {
   }
 
   saveChanges() {
-    if (this.userProfileForm.valid) {
+    if (this.userId && this.userProfileForm.valid) {
       const updatedUserData = this.userProfileForm.value;
-      
+
       this.userService.updateRegisteredUser(this.userId, updatedUserData).subscribe({
         next: (updatedUser) => {
           console.log('User profile updated successfully:', updatedUser);
