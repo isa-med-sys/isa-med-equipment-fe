@@ -23,12 +23,16 @@
                         <td>{{eq.price}}</td>
                         <td>
                             <button color="accent" (click)="onShowCompanies(eq)" mat-icon-button>
-                                <mat-icon>show</mat-icon>
+                                <mat-icon>Show Companies</mat-icon>
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput type="text"/>
+            </mat-form-field>
         </div>
     </div>
 </div>
