@@ -11,6 +11,10 @@ export class CompanyService {
 
   constructor(private http: HttpClient) { }
 
+  getCompanies():Observable<Company[]> {
+    return this.http.get<Company[]>(environment.apiHost + `companies`);
+  }
+
   getCompanyById(id: number):Observable<Company> {
     return this.http.get<Company>(environment.apiHost + `companies/${id}`);
   }

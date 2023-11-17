@@ -8,12 +8,11 @@ import { LayoutModule } from './layout/layout.module';
 import { UserModule } from './feature-modules/user/user.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
-import { CompanyProfileComponent } from './feature-modules/company/company-profile/company-profile.component';
+import { CompanyModule } from "./feature-modules/company/company.module";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CompanyProfileComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +20,8 @@ import { CompanyProfileComponent } from './feature-modules/company/company-profi
     AuthModule,
     BrowserAnimationsModule,
     LayoutModule,
-    UserModule
+    UserModule,
+    CompanyModule
   ],
   providers: [
     {
@@ -34,5 +34,5 @@ import { CompanyProfileComponent } from './feature-modules/company/company-profi
 })
 
 export class AppModule {
-  
+
  }

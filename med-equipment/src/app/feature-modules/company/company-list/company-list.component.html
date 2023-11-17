@@ -1,0 +1,8 @@
+<div *ngIf="companies" class="company-list">
+  <div *ngFor="let company of companies" class="company-item" (click)="viewCompanyDetails(company.id)">
+    <div class="company-info">
+      <h3>{{ company.name }}</h3>
+      <p>Rating: {{ company.rating }}</p>
+    </div>
+  </div>
+</div>
