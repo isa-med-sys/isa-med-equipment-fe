@@ -1,0 +1,128 @@
+<div class="profile-page">
+  <h2>Profile Data</h2>
+
+  <div class="info-container">
+
+    <div class="company-profile" *ngIf="admin">
+      <h3>Company</h3>
+
+      <div class="company-info" *ngIf="!isEditableCompany">
+        <div class="data-container">
+          <p><strong>Name:</strong> {{ admin.company.name }}</p>
+          <p><strong>Address:</strong> {{ admin.company.address.street }} {{ admin.company.address.streetNumber }}, {{ admin.company.address.city }}, {{ admin.company.address.country }}</p>
+          <p><strong>Description:</strong> {{ admin.company.description }}</p>
+          <p><strong>Rating:</strong> {{ admin.company.rating }}</p>
+        </div>
+
+        <button mat-button (click)="toggleEditModeCompany()">Edit</button>
+      </div>
+
+      <form [formGroup]="companyForm" *ngIf="isEditableCompany" (ngSubmit)="saveCompanyChanges()">
+        <div class="form">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" type="text" />
+          </mat-form-field>
+          <div formGroupName="address" class="form">
+            <mat-form-field>
+              <mat-label>Street</mat-label>
+              <input matInput formControlName="street" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Street number</mat-label>
+              <input matInput formControlName="streetNumber" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" type="text" />
+            </mat-form-field>
+          </div>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" type="text" />
+          </mat-form-field>
+          <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+          <button color="primary" type="submit" mat-raised-button>Save Changes</button>
+          <button mat-button type="button" (click)="discardChangesCompany()">Discard Changes</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-profile" *ngIf="admin">
+      <h3>User</h3>
+
+      <div class="admin-info" *ngIf="!isEditableAdmin">
+        <div class="data-container">
+          <p><strong>Name:</strong> {{ admin.name }}</p>
+          <p><strong>Surname:</strong> {{ admin.surname }}</p>
+          <p><strong>E-Mail:</strong> {{ admin.email }}</p>
+          <p><strong>Phone Number:</strong> {{ admin.phoneNumber }}</p>
+          <p><strong>Address:</strong> {{ admin.address.street }} {{ admin.address.streetNumber }}, {{ admin.address.city }}, {{ admin.address.country }}</p>
+        </div>
+
+        <button mat-button (click)="toggleEditModeAdmin()">Edit</button>
+      </div>
+
+      <form [formGroup]="adminForm" *ngIf="isEditableAdmin" (ngSubmit)="saveAdminChanges()">
+        <div class="form">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" type="text" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Surname</mat-label>
+            <input matInput formControlName="surname" type="text" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Phone number</mat-label>
+            <input matInput formControlName="phoneNumber" type="text" />
+          </mat-form-field>
+          <div formGroupName="address" class="form">
+            <mat-form-field>
+              <mat-label>Street</mat-label>
+              <input matInput formControlName="street" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Street number</mat-label>
+              <input matInput formControlName="streetNumber" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" type="text" />
+            </mat-form-field>
+          </div>
+          <mat-form-field>
+            <mat-label>New Password</mat-label>
+            <input matInput formControlName="newPassword" type="password" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="currentPassword" type="password" />
+          </mat-form-field>
+          <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+          <button color="primary" type="submit" mat-raised-button>Save Changes</button>
+          <button mat-button type="button" (click)="discardChangesAdmin()">Discard Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admins">
+    <h3>Admins</h3>
+    <p></p>
+  </div>
+
+  <div class="equipment" *ngIf="admin">
+    <h3>Equipment</h3>
+    <p *ngFor="let e of admin.company.equipment">Name: {{ e.name }}, Type: {{ e.type }}, Price: {{ e.price }}</p>
+  </div>
+
+</div>

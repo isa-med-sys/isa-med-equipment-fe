@@ -6,12 +6,16 @@ import { UserProfileComponent } from 'src/app/feature-modules/user/user-profile/
 import { HomeComponent } from 'src/app/layout/home/home.component';
 import { CompanyProfileComponent } from "../../feature-modules/company/company-profile/company-profile.component";
 import {CompanyListComponent} from "../../feature-modules/company/company-list/company-list.component";
+import {
+  CompanyAdminProfileComponent
+} from "../../feature-modules/user/company-admin-profile/company-admin-profile.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'user/profile', component: UserProfileComponent },
+  { path: 'company-admin/profile', component: CompanyAdminProfileComponent },
   { path: 'companies', component: CompanyListComponent },
   { path: 'company/:id', component: CompanyProfileComponent }
 ];
