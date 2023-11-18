@@ -4,7 +4,8 @@
             <button *ngIf="user && user.email === ''" mat-raised-button color="accent" [routerLink]="['login']">Login</button>
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['companies']">Companies</button>
-            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['user/profile']">Profile</button>
+            <button *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'" mat-raised-button color="accent" [routerLink]="['user/profile']">Profile</button>
+            <button *ngIf="user && user.role == 'COMPANY_ADMIN'" mat-raised-button color="accent" [routerLink]="['company-admin/profile']">Profile</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
         </div>
     </div>
