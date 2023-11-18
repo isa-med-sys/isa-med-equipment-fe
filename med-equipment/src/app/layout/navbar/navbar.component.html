@@ -3,6 +3,7 @@
         <div id="buttons">
             <button *ngIf="user && user.email === ''" mat-raised-button color="accent" [routerLink]="['login']">Login</button>
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
+            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['admin/profile']">Admin Profile</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['companies']">Companies</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['user/profile']">Profile</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
