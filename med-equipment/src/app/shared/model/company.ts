@@ -8,5 +8,4 @@ export interface Company {
   rating: number;
   address: Address;
   equipment: Equipment[];
-  //admins: A[];
 }

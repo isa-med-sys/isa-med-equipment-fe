@@ -4,11 +4,12 @@ import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { MatIcon, MatIconModule  } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -16,7 +17,8 @@ import { MatIcon, MatIconModule  } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginatorModule,
   ],
   exports: [
     MatToolbar,
@@ -24,9 +26,12 @@ import { MatIcon, MatIconModule  } from '@angular/material/icon';
     MatFormField,
     MatLabel,
     MatInput,
-    MatTable,
+    MatExpansionModule,
+    MatTableModule,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    MatPaginator,
+    
   ]
 })
 export class MaterialModule { }
