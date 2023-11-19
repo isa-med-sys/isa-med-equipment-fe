@@ -8,7 +8,7 @@ import { User } from 'src/app/authentication/model/user.model';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  
+
   user: User | undefined;
 
   constructor(private authService: AuthService) {}

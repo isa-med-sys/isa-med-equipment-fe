@@ -4,10 +4,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
 
 @NgModule({
   declarations: [
-    UserProfileComponent
+    UserProfileComponent,
+    CompanyAdminProfileComponent
   ],
   imports: [
     CommonModule,

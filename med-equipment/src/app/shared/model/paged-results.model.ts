@@ -1,6 +1,17 @@
 export interface PagedResults<T>{
-    items: never[];
-    results: T[];
-    totalCount: number;
+    content: T[];
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    first: boolean;
+    numberOfElements: number;
+    empty: boolean;
 }
   
