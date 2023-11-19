@@ -1,0 +1,47 @@
+div.profile-container {
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+div.company-info {
+  margin-bottom: 20px;
+}
+
+p.description {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+div.address-info {
+  margin-top: 10px;
+}
+
+div.map-container {
+  /* Add your map styles here */
+}
+
+ul.equipment-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+li.equipment-item {
+  margin-bottom: 5px;
+}
+
+p.rating {
+  font-size: 18px;
+  font-weight: bold;
+  color: #FFD700;
+}

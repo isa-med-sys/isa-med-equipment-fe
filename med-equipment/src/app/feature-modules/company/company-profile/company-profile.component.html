@@ -1,0 +1,24 @@
+<div *ngIf="company" class="profile-container">
+  <div class="company-info">
+    <h1>{{ company.name }}</h1>
+    <div class="address-info">
+      <p>{{ company.address.street }} {{ company.address.streetNumber }}, {{ company.address.city }}, {{ company.address.country }}</p>
+    </div>
+    <p class="description">{{ company.description }}</p>
+    <p class="rating">Rating: {{ company.rating }}</p>
+  </div>
+
+  <!-- Add map component here if needed -->
+  <!-- <div class="map-container">
+    Your map component goes here
+  </div> -->
+
+  <div>
+    <h2>Equipment List</h2>
+    <ul class="equipment-list">
+      <li *ngFor="let e of equipment" class="equipment-item">
+        {{ e.name }}
+      </li>
+    </ul>
+  </div>
+</div>
