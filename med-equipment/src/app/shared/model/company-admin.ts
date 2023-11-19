@@ -1,3 +1,4 @@
+import { Address } from "./address";
 import { Company } from "./company";
 
 export interface CompanyAdmin {
@@ -9,4 +10,5 @@ export interface CompanyAdmin {
   newPassword: string;
   phoneNumber: string;
   company: Company;
+  companyId: number; //rdd
 }

@@ -5,10 +5,12 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './authentication/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
+import { AdministrationModule } from './feature-modules/administration/administration.module';
 import { UserModule } from './feature-modules/user/user.module';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CompanyModule } from './feature-modules/company/company.module';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { MarketplaceModule } from './feature-modules/marketplace/marketplace.module';
 import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
-import { CompanyModule } from "./feature-modules/company/company.module";
 
 @NgModule({
   declarations: [
@@ -20,19 +22,22 @@ import { CompanyModule } from "./feature-modules/company/company.module";
     AuthModule,
     BrowserAnimationsModule,
     LayoutModule,
+    HttpClientModule,
+    MarketplaceModule,
     UserModule,
-    CompanyModule
+    CompanyModule,
+    AdministrationModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true,
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })
 
 export class AppModule {
-
+  
  }
