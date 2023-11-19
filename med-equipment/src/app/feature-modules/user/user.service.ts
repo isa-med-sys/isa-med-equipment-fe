@@ -33,7 +33,7 @@ export class UserService {
     return this.http.put<Company>(environment.apiHost + `companies/update/${id}`, company);
   }
 
-  getAllAdmins(id: number):Observable<CompanyAdmin[]> {
+  getAllAdmins(id: number): Observable<CompanyAdmin[]> {
     return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${id}`);
   }
 }

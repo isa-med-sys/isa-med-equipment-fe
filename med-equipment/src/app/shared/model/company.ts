@@ -1,7 +1,6 @@
 import { Address } from "./address";
 import { CompanyAdmin } from "./company-admin";
 import { Equipment } from "./equipment";
-import {CompanyAdmin} from "./company-admin";
 
 export interface Company {
   id: number;

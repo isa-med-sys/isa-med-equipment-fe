@@ -25,6 +25,7 @@ export class AdministrationService {
   }
 
   getAdminsByCompanyId(companyId: number): Observable<CompanyAdmin[]> {
-    return this.http.get<CompanyAdmin[]>(environment.apiHost + `users/company/${companyId}`)
+    //return this.http.get<CompanyAdmin[]>(environment.apiHost + `users/company/${companyId}`)
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${companyId}`);
   }
 }
