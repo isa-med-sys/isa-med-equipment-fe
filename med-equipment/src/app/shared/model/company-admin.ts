@@ -1,4 +1,3 @@
-import { Address } from "./address";
 import { Company } from "./company";
 
 export interface CompanyAdmin {
@@ -9,6 +8,5 @@ export interface CompanyAdmin {
   currentPassword: string;
   newPassword: string;
   phoneNumber: string;
-  address: Address;
   company: Company;
 }

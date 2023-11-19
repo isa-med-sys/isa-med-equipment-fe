@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CompanyAdmin } from "../../../shared/model/company-admin";
 import { UserService } from "../user.service";
 import { AuthService } from "../../../authentication/auth.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -18,6 +18,7 @@ export class CompanyAdminProfileComponent {
   adminForm!: FormGroup;
   companyForm!: FormGroup;
   errorMessage: string = '';
+  admins: CompanyAdmin[] = [];
 
   constructor(private userService: UserService, authService: AuthService, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
@@ -29,6 +30,12 @@ export class CompanyAdminProfileComponent {
         next: (user) => {
           this.admin = user;
           this.initializeForm();
+
+          this.userService.getAllAdmins(this.admin.company.id).subscribe({
+            next: (result) => {
+              this.admins = result;
+            }
+          })
         },
         error: (err) => {
           console.error('Error fetching admin profile:', err);
@@ -49,12 +56,12 @@ export class CompanyAdminProfileComponent {
       currentPassword: ['', Validators.required],
       newPassword: [''],
       phoneNumber: [this.admin.phoneNumber, Validators.required],
-      address: this.fb.group({
-        street: [this.admin.address.street],
-        streetNumber: [this.admin.address.streetNumber],
-        country: [this.admin.address.country],
-        city: [this.admin.address.city]
-      })
+      // address: this.fb.group({
+      //   street: [this.admin.address.street],
+      //   streetNumber: [this.admin.address.streetNumber],
+      //   country: [this.admin.address.country],
+      //   city: [this.admin.address.city]
+      // })
     });
   }
 
@@ -98,6 +105,7 @@ export class CompanyAdminProfileComponent {
           console.log('User profile updated successfully:', updatedAdmin);
           this.admin = updatedAdmin;
           this.isEditableAdmin = false;
+          this.initializeAdminForm();
         },
         error: (err) => {
           this.errorMessage = err.status == 400 ? 'Wrong password!' : 'Unknown error while updating profile';
@@ -115,6 +123,7 @@ export class CompanyAdminProfileComponent {
           console.log('Company updated successfully:', result);
           this.admin.company = result;
           this.isEditableCompany = false;
+          this.initializeCompanyForm();
         },
         error: (err) => {
           this.errorMessage = err.text;

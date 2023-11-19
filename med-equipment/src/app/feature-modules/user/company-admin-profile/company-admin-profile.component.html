@@ -61,7 +61,7 @@
           <p><strong>Surname:</strong> {{ admin.surname }}</p>
           <p><strong>E-Mail:</strong> {{ admin.email }}</p>
           <p><strong>Phone Number:</strong> {{ admin.phoneNumber }}</p>
-          <p><strong>Address:</strong> {{ admin.address.street }} {{ admin.address.streetNumber }}, {{ admin.address.city }}, {{ admin.address.country }}</p>
+<!--          <p><strong>Address:</strong> {{ admin.address.street }} {{ admin.address.streetNumber }}, {{ admin.address.city }}, {{ admin.address.country }}</p>-->
         </div>
 
         <button mat-button (click)="toggleEditModeAdmin()">Edit</button>
@@ -81,24 +81,24 @@
             <mat-label>Phone number</mat-label>
             <input matInput formControlName="phoneNumber" type="text" />
           </mat-form-field>
-          <div formGroupName="address" class="form">
-            <mat-form-field>
-              <mat-label>Street</mat-label>
-              <input matInput formControlName="street" type="text" />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Street number</mat-label>
-              <input matInput formControlName="streetNumber" type="text" />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Country</mat-label>
-              <input matInput formControlName="country" type="text" />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>City</mat-label>
-              <input matInput formControlName="city" type="text" />
-            </mat-form-field>
-          </div>
+<!--          <div formGroupName="address" class="form">-->
+<!--            <mat-form-field>-->
+<!--              <mat-label>Street</mat-label>-->
+<!--              <input matInput formControlName="street" type="text" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field>-->
+<!--              <mat-label>Street number</mat-label>-->
+<!--              <input matInput formControlName="streetNumber" type="text" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field>-->
+<!--              <mat-label>Country</mat-label>-->
+<!--              <input matInput formControlName="country" type="text" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field>-->
+<!--              <mat-label>City</mat-label>-->
+<!--              <input matInput formControlName="city" type="text" />-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
           <mat-form-field>
             <mat-label>New Password</mat-label>
             <input matInput formControlName="newPassword" type="password" />
@@ -115,9 +115,9 @@
     </div>
   </div>
 
-  <div class="admins">
+  <div class="admins" *ngIf="admin">
     <h3>Admins</h3>
-    <p></p>
+    <p *ngFor="let a of admins">{{ a.name }} {{ a.surname }}</p>
   </div>
 
   <div class="equipment" *ngIf="admin">
