@@ -1,5 +1,6 @@
 import { Address } from "./address";
 import { Equipment } from "./equipment";
+import {CompanyAdmin} from "./company-admin";
 
 export interface Company {
   id: number;
@@ -8,4 +9,5 @@ export interface Company {
   rating: number;
   address: Address;
   equipment: Equipment[];
+  admins: CompanyAdmin[];
 }
