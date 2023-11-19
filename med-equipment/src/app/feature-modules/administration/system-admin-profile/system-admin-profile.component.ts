@@ -67,12 +67,12 @@ export class SystemAdminProfileComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['admin'],
       companyId: [0],
-      address: this.fb.group({
-        street: ['', [Validators.required]],
-        streetNumber: ['', [Validators.required]],
-        country: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-      }),
+      // address: this.fb.group({
+      //   street: ['', [Validators.required]],
+      //   streetNumber: ['', [Validators.required]],
+      //   country: ['', [Validators.required]],
+      //   city: ['', [Validators.required]],
+      // }),
     });
   }
 
@@ -112,6 +112,19 @@ export class SystemAdminProfileComponent {
     this.administrationService.getCompanies().subscribe({
       next: (companies) => {
         this.companies = companies;
+  
+        for (let i = 0; i < this.companies.length; i++) {
+          this.administrationService.getAdminsByCompanyId(this.companies[i].id)
+            .subscribe({
+              next: (admins) => {
+                this.companies[i].admins = admins;
+              },
+              error: (err) => {
+                console.error(`Error fetching admins for company ${this.companies[i].id}:`, err);
+              },
+            });
+        }
+  
         this.initializeCompanyForm();
         this.initializeAdminForm();
       },

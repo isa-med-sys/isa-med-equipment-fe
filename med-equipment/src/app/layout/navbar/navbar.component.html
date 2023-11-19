@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <div>
         <div id="buttons">
-            <button *ngIf="user && user.email !== ''" mat-raised-button color="primary" [routerLink]="['equipment']">Equipment</button>
+            <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['equipment']">All Equipment</button>
             <button *ngIf="user && user.email === ''" mat-raised-button color="accent" [routerLink]="['login']">Login</button>
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" [routerLink]="['admin/profile']">Admin Profile</button>

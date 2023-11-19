@@ -13,14 +13,18 @@ export class AdministrationService {
   constructor(private http: HttpClient) { }
 
   getCompanies(): Observable<Company[]> {
-    return this.http.get<Company[]>(environment.apiHost + 'companies');
+    return this.http.get<Company[]>(environment.apiHost + 'companies/temp'); //temp
   }
 
   addCompany(company: Company): Observable<Company> {
-    return this.http.post<Company>(environment.apiHost + 'companies/add', company);
+    return this.http.post<Company>(environment.apiHost + 'companies', company);
   }
 
   addAdmin(admin:CompanyAdmin): Observable<CompanyAdmin> {
     return this.http.post<CompanyAdmin>(environment.apiHost + 'users/register-company-admin', admin);
+  }
+
+  getAdminsByCompanyId(companyId: number): Observable<CompanyAdmin[]> {
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `users/company/${companyId}`)
   }
 }
