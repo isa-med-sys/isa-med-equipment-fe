@@ -1,27 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CompanyListComponent } from './company-list/company-list.component';
 import { CompanyProfileComponent } from "./company-profile/company-profile.component";
+import { CompanySearchComponent } from "./company-search/company-search.component";
 import { MaterialModule } from "../../infrastructure/material/material.module";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
 @NgModule({
   declarations: [
-    CompanyProfileComponent,
-    CompanyListComponent
+    CompanySearchComponent,
+    CompanyProfileComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule,
+    MatSelectModule,
+    FormsModule
   ],
   exports: [
-    CompanyProfileComponent,
-    CompanyListComponent
+    CompanySearchComponent,
+    CompanyProfileComponent
   ]
 })
 export class CompanyModule { }

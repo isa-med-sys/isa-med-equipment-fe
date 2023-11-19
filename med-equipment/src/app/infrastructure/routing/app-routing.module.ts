@@ -5,14 +5,14 @@ import { RegistrationComponent } from 'src/app/authentication/registration/regis
 import { UserProfileComponent } from 'src/app/feature-modules/user/user-profile/user-profile.component';
 import { HomeComponent } from 'src/app/layout/home/home.component';
 import { CompanyProfileComponent } from "../../feature-modules/company/company-profile/company-profile.component";
-import {CompanyListComponent} from "../../feature-modules/company/company-list/company-list.component";
+import { CompanySearchComponent } from 'src/app/feature-modules/company/company-search/company-search.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'user/profile', component: UserProfileComponent },
-  { path: 'companies', component: CompanyListComponent },
+  { path: 'companies', component: CompanySearchComponent },
   { path: 'company/:id', component: CompanyProfileComponent }
 ];
 
