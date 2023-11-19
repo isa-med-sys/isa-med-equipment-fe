@@ -35,7 +35,7 @@ export class CompanyAdminProfileComponent {
             next: (result) => {
               this.admins = result;
             }
-          })
+          });
         },
         error: (err) => {
           console.error('Error fetching admin profile:', err);
@@ -106,6 +106,11 @@ export class CompanyAdminProfileComponent {
           this.admin = updatedAdmin;
           this.isEditableAdmin = false;
           this.initializeAdminForm();
+          this.userService.getAllAdmins(this.admin.company.id).subscribe({
+            next: (result) => {
+              this.admins = result;
+            }
+          });
         },
         error: (err) => {
           this.errorMessage = err.status == 400 ? 'Wrong password!' : 'Unknown error while updating profile';
