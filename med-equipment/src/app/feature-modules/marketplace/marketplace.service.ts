@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Equipment } from '../../shared/model/equipment';
 import { environment } from 'src/env/environment';
+import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { Company } from 'src/app/shared/model/company';
 
 @Injectable({
@@ -38,5 +39,21 @@ export class MarketplaceService {
       params = params.set('role', role);
     }
     return this.http.get<Equipment[]>(environment.apiHost + 'equipment/search', { params });
+  }
+
+  getEquipmentTemp(name: string, type: string, rating: number, page: number, size: number): Observable<PagedResults<Equipment>> {
+    let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    if (name) {
+      params = params.set('name', name);
+    }
+    if (type) {
+      params = params.set('type', type);
+    }
+    if (rating !== undefined && rating !== null) {
+      params = params.set('rating', rating.toString());
+    }
+    return this.http.get<PagedResults<Equipment>>(environment.apiHost + 'equipment/rerna', { params });
   }
 }
