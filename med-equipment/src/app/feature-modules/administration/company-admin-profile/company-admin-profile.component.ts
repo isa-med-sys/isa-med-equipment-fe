@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CompanyAdmin } from "../../../shared/model/company-admin";
-import { UserService } from "../user.service";
 import { AuthService } from "../../../authentication/auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AdministrationService } from '../administration.service';
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -20,18 +20,18 @@ export class CompanyAdminProfileComponent {
   errorMessage: string = '';
   admins: CompanyAdmin[] = [];
 
-  constructor(private userService: UserService, authService: AuthService, private fb: FormBuilder) {
+  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
   }
 
   ngOnInit() {
     if (this.adminId) {
-      this.userService.getCompanyAdmin(this.adminId).subscribe({
+      this.administrationService.getCompanyAdmin(this.adminId).subscribe({
         next: (user) => {
           this.admin = user;
           this.initializeForm();
 
-          this.userService.getAllAdmins(this.admin.company.id).subscribe({
+          this.administrationService.getAllAdmins(this.admin.company.id).subscribe({
             next: (result) => {
               this.admins = result;
             }
@@ -100,13 +100,13 @@ export class CompanyAdminProfileComponent {
     if (this.adminId && this.adminForm.valid) {
       const updatedData = this.adminForm.value;
 
-      this.userService.updateCompanyAdmin(this.adminId, updatedData).subscribe({
+      this.administrationService.updateCompanyAdmin(this.adminId, updatedData).subscribe({
         next: (updatedAdmin) => {
           console.log('User profile updated successfully:', updatedAdmin);
           this.admin = updatedAdmin;
           this.isEditableAdmin = false;
           this.initializeAdminForm();
-          this.userService.getAllAdmins(this.admin.company.id).subscribe({
+          this.administrationService.getAllAdmins(this.admin.company.id).subscribe({
             next: (result) => {
               this.admins = result;
             }
@@ -123,7 +123,7 @@ export class CompanyAdminProfileComponent {
     if (this.adminId && this.companyForm.valid) {
       const updatedData = this.companyForm.value;
 
-      this.userService.updateCompany(this.admin.company.id, updatedData).subscribe({
+      this.administrationService.updateCompany(this.admin.company.id, updatedData).subscribe({
         next: (result) => {
           console.log('Company updated successfully:', result);
           this.admin.company = result;
