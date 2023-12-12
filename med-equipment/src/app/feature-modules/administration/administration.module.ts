@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { RegisteredUserProfileComponent } from './registered-user-profile/registered-user-profile.component';
 import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
@@ -13,6 +14,7 @@ import { CompanyAdminProfileComponent } from './company-admin-profile/company-ad
   declarations: [
     SystemAdminProfileComponent,
     RegisteredUserProfileComponent,
+    ChangePasswordComponent,
     CompanyAdminProfileComponent
   ],
   imports: [
@@ -24,6 +26,7 @@ import { CompanyAdminProfileComponent } from './company-admin-profile/company-ad
   exports: [
     SystemAdminProfileComponent,
     RegisteredUserProfileComponent,
+    ChangePasswordComponent,
     CompanyAdminProfileComponent
   ]
 })

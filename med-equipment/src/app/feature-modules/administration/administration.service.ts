@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Company } from 'src/app/shared/model/company';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
+import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
 
@@ -14,7 +15,7 @@ export class AdministrationService {
   constructor(private http: HttpClient) { }
 
   getCompanies(): Observable<Company[]> {
-    return this.http.get<Company[]>(environment.apiHost + 'companies/temp'); //temp
+    return this.http.get<Company[]>(environment.apiHost + 'companies/temp'); //temp a mozda i ne
   }
 
   addCompany(company: Company): Observable<Company> {
@@ -25,8 +26,11 @@ export class AdministrationService {
     return this.http.post<CompanyAdmin>(environment.apiHost + 'users/register-company-admin', admin);
   }
 
+  addSysAdmin(admin:SystemAdmin): Observable<SystemAdmin> {
+    return this.http.post<SystemAdmin>(environment.apiHost + 'users/register-system-admin', admin);
+  }
+
   getAdminsByCompanyId(companyId: number): Observable<CompanyAdmin[]> {
-    //return this.http.get<CompanyAdmin[]>(environment.apiHost + `users/company/${companyId}`)
     return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${companyId}`);
   }
 
@@ -52,5 +56,9 @@ export class AdministrationService {
 
   getAllAdmins(id: number): Observable<CompanyAdmin[]> {
     return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${id}`);
+  }
+
+  changePassword(id: number, pass: string): Observable<Boolean> {
+    return this.http.put<Boolean>(environment.apiHost + `users/password/${id}`, pass);
   }
 }
