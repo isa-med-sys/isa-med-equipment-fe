@@ -8,8 +8,8 @@ import { HomeComponent } from 'src/app/layout/home/home.component';
 import { CompanyProfileComponent } from "../../feature-modules/company/company-profile/company-profile.component";
 import { SystemAdminProfileComponent } from 'src/app/feature-modules/administration/system-admin-profile/system-admin-profile.component';
 import { CompanySearchComponent } from 'src/app/feature-modules/company/company-search/company-search.component';
-import { CompanyAdminProfileComponent } from "../../feature-modules/user/company-admin-profile/company-admin-profile.component";
-import { ChangePasswordComponent } from 'src/app/feature-modules/user/change-password/change-password.component';
+import { ChangePasswordComponent } from 'src/app/feature-modules/administration/change-password/change-password.component';
+import { CompanyAdminProfileComponent } from 'src/app/feature-modules/administration/company-admin-profile/company-admin-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

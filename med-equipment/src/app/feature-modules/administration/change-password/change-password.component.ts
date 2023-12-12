@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service';
 import { AuthService } from 'src/app/authentication/auth.service';
+import { AdministrationService } from '../administration.service';
 
 @Component({
   selector: 'app-change-password',
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/authentication/auth.service';
 })
 export class ChangePasswordComponent {
   constructor(
-    private service: UserService,
+    private service: AdministrationService,
     private authService: AuthService,
     private router: Router
   ) {}
