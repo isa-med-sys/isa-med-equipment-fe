@@ -4,12 +4,16 @@ import { SystemAdminProfileComponent } from './system-admin-profile/system-admin
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+import { RegisteredUserProfileComponent } from './registered-user-profile/registered-user-profile.component';
+import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
 
 
 
 @NgModule({
   declarations: [
-    SystemAdminProfileComponent
+    SystemAdminProfileComponent,
+    RegisteredUserProfileComponent,
+    CompanyAdminProfileComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +22,9 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     HttpClientModule
   ],
   exports: [
-    SystemAdminProfileComponent
+    SystemAdminProfileComponent,
+    RegisteredUserProfileComponent,
+    CompanyAdminProfileComponent
   ]
 })
 export class AdministrationModule { }

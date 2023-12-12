@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
-import { UserService } from '../user.service';
-import { take } from 'rxjs';
 import { AuthService } from 'src/app/authentication/auth.service';
+import { AdministrationService } from '../administration.service';
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+  selector: 'app-registered-user-profile',
+  templateUrl: './registered-user-profile.component.html',
+  styleUrls: ['./registered-user-profile.component.scss']
 })
-export class UserProfileComponent {
+export class RegisteredUserProfileComponent {
 
   userId?: number;
   user!: RegisteredUser;
@@ -18,13 +17,13 @@ export class UserProfileComponent {
   isEditable: boolean = false;
   errorMessage: string = '';
 
-  constructor(private userService: UserService, private fb: FormBuilder, authService: AuthService) {
+  constructor(private administrationService: AdministrationService, private fb: FormBuilder, authService: AuthService) {
     this.userId = authService.user$.value.id;
   }
 
   ngOnInit() {
     if (this.userId) {
-      this.userService.getRegisteredUser(this.userId).subscribe({
+      this.administrationService.getRegisteredUser(this.userId).subscribe({
         next: (user) => {
           this.user = user;
           this.initializeForm();
@@ -66,7 +65,7 @@ export class UserProfileComponent {
     if (this.userId && this.userProfileForm.valid) {
       const updatedUserData = this.userProfileForm.value;
 
-      this.userService.updateRegisteredUser(this.userId, updatedUserData).subscribe({
+      this.administrationService.updateRegisteredUser(this.userId, updatedUserData).subscribe({
         next: (updatedUser) => {
           console.log('User profile updated successfully:', updatedUser);
           this.user = updatedUser;
