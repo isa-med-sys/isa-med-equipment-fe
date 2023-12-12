@@ -5,11 +5,13 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
     UserProfileComponent,
-    CompanyAdminProfileComponent
+    CompanyAdminProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,

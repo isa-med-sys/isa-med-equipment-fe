@@ -9,6 +9,7 @@ import { CompanyProfileComponent } from "../../feature-modules/company/company-p
 import { SystemAdminProfileComponent } from 'src/app/feature-modules/administration/system-admin-profile/system-admin-profile.component';
 import { CompanySearchComponent } from 'src/app/feature-modules/company/company-search/company-search.component';
 import { CompanyAdminProfileComponent } from "../../feature-modules/user/company-admin-profile/company-admin-profile.component";
+import { ChangePasswordComponent } from 'src/app/feature-modules/user/change-password/change-password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,10 +17,11 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'equipment', component: EquipmentComponent },
   { path: 'user/profile', component: UserProfileComponent },
+  { path: 'change-password', component: ChangePasswordComponent },
   { path: 'admin/profile', component: SystemAdminProfileComponent},
   { path: 'company-admin/profile', component: CompanyAdminProfileComponent },
   { path: 'companies', component: CompanySearchComponent },
-  { path: 'company/:id', component: CompanyProfileComponent }
+  { path: 'company/:id', component: CompanyProfileComponent },
 ];
 
 @NgModule({

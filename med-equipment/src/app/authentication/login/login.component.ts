@@ -32,12 +32,11 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(login).subscribe({
         next: () => {
-          if(this.authService.user$.value.role == 'SYSTEM_ADMIN') {
+          if(this.authService.user$.value.role == 'SYSTEM_ADMIN') { //brgl
             this.authService.getPasswordChanged(this.authService.user$.value.id).subscribe({
               next: (result) => {
-                if(result)
-                  console.log('nikom nista');
-                else console.log('redirektuj na chejndzh pass'); //da se odradi
+                if(!result)
+                  this.router.navigate(['change-password']);
               },
               error: (errorMessage) => {
                 this.errorMessage = errorMessage;
