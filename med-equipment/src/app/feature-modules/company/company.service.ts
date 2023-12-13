@@ -22,10 +22,15 @@ export class CompanyService {
     return this.http.get<Company>(environment.apiHost + `companies/${id}`);
   }
 
-  getEquipment(id: number): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>(environment.apiHost + `companies/all-equipment/${id}`);
+
+  getEquipmentByCompany(id: number): Observable<Equipment[]> {
+    return this.http.get<Equipment[]>(environment.apiHost + `companies/${id}/equipment`);
   }
 
+  getAvailableEquipmentByCompany(id: number): Observable<Equipment[]> {
+    return this.http.get<Equipment[]>(environment.apiHost + `companies/${id}/equipment/available`);
+  }
+  
   private buildParams(name: string, city: string, rating: number, page: number, size: number): HttpParams {
     let params = new HttpParams()
       .set('page', page.toString())

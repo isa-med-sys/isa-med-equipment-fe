@@ -27,14 +27,12 @@ export class CompanyProfileComponent {
       next: (company) => {
         this.company = company;
 
-        //if(this.userRole) {
-          this.companyService.getEquipment(this.companyId).subscribe({
-            next: (result) => {
-              this.equipment = result;
-              console.log(this.equipment);
-            }
-          });
-        //}
+        this.companyService.getAvailableEquipmentByCompany(this.companyId).subscribe({
+          next: (result) => {
+            this.equipment = result;
+            console.log(this.equipment);
+          }
+        });
       },
       error: (err) => {
         console.error('Error fetching company:', err);
