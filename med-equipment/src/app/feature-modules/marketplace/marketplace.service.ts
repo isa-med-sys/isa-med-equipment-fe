@@ -13,10 +13,6 @@ export class MarketplaceService {
 
   constructor(private http: HttpClient) { }
 
-  getEquipment(): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>(environment.apiHost + 'equipment');
-  }
-
   getCompaniesByEquipment(equipmentId: number): Observable<Company[]> {
     return this.http.get<Company[]>(environment.apiHost + `companies/equipment/${equipmentId}`);
   }
@@ -41,7 +37,7 @@ export class MarketplaceService {
     return this.http.get<Equipment[]>(environment.apiHost + 'equipment/search', { params });
   }
 
-  getEquipmentTemp(name: string, type: string, rating: number, page: number, size: number): Observable<PagedResults<Equipment>> {
+  getEquipment(name: string, type: string, rating: number, page: number, size: number): Observable<PagedResults<Equipment>> {
     let params = new HttpParams()
     .set('page', page.toString())
     .set('size', size.toString());
@@ -54,6 +50,6 @@ export class MarketplaceService {
     if (rating !== undefined && rating !== null) {
       params = params.set('rating', rating.toString());
     }
-    return this.http.get<PagedResults<Equipment>>(environment.apiHost + 'equipment/rerna', { params });
+    return this.http.get<PagedResults<Equipment>>(environment.apiHost + 'equipment', { params });
   }
 }

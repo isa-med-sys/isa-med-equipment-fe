@@ -3,6 +3,9 @@ import { CompanyAdmin } from "../../../shared/model/company-admin";
 import { AuthService } from "../../../authentication/auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AdministrationService } from '../administration.service';
+import { Equipment } from 'src/app/shared/model/equipment';
+import { CompanyService } from '../../company/company.service';
+
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -19,8 +22,9 @@ export class CompanyAdminProfileComponent {
   companyForm!: FormGroup;
   errorMessage: string = '';
   admins: CompanyAdmin[] = [];
+  equipment: Equipment[] = [];
 
-  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder) {
+  constructor(private administrationService: AdministrationService, authService: AuthService, private companyService: CompanyService, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
   }
 
@@ -34,6 +38,11 @@ export class CompanyAdminProfileComponent {
           this.administrationService.getAllAdmins(this.admin.company.id).subscribe({
             next: (result) => {
               this.admins = result;
+              this.companyService.getEquipmentByCompany(this.admin.company.id).subscribe({
+                next: (result) => {
+                  this.equipment = result;
+                }
+              });
             }
           });
         },
@@ -56,12 +65,6 @@ export class CompanyAdminProfileComponent {
       currentPassword: ['', Validators.required],
       newPassword: [''],
       phoneNumber: [this.admin.phoneNumber, Validators.required],
-      // address: this.fb.group({
-      //   street: [this.admin.address.street],
-      //   streetNumber: [this.admin.address.streetNumber],
-      //   country: [this.admin.address.country],
-      //   city: [this.admin.address.city]
-      // })
     });
   }
 
@@ -76,7 +79,6 @@ export class CompanyAdminProfileComponent {
         country: [this.admin.company.address.country],
         city: [this.admin.company.address.city]
       }),
-      equipment: [this.admin.company.equipment]
     });
   }
 

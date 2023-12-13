@@ -8,5 +8,6 @@ export interface Equipment {
   price: number;
   rating: number;
   type: EquipmentType;
+  quantity?: number;
   companies: Company[];
 }

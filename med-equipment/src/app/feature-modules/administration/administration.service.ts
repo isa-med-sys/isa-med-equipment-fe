@@ -55,7 +55,7 @@ export class AdministrationService {
   }
 
   getAllAdmins(id: number): Observable<CompanyAdmin[]> {
-    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${id}`);
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/${id}/admins`);
   }
 
   changePassword(id: number, pass: string): Observable<Boolean> {

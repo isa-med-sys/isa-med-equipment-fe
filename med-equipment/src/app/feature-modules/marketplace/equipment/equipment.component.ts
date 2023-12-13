@@ -55,7 +55,7 @@ export class EquipmentComponent implements AfterViewInit {
   }
 
   loadEquipment(): void {
-    this.service.getEquipmentTemp(this.name, this.type, this.rating, this.page, this.size).subscribe(result => {
+    this.service.getEquipment(this.name, this.type, this.rating, this.page, this.size).subscribe(result => {
       this.dataSource = new MatTableDataSource<Equipment>();
       this.dataSource.data = result.content;
       this.totalEquipment = result.totalElements;
@@ -100,5 +100,4 @@ export class EquipmentComponent implements AfterViewInit {
   //     }
   //   })
   // } sow za kompani admina i get eq fale
-
 }

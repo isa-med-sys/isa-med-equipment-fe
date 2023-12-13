@@ -22,9 +22,9 @@ import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
     BrowserAnimationsModule,
     LayoutModule,
     HttpClientModule,
-    MarketplaceModule,
-    CompanyModule,
     AdministrationModule,
+    MarketplaceModule,
+    CompanyModule
   ],
   providers: [
     {
