@@ -6,6 +6,8 @@ import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
+import {Equipment} from "../../shared/model/equipment";
+import {en} from "@fullcalendar/core/internal-common";
 
 @Injectable({
   providedIn: 'root'
@@ -55,10 +57,18 @@ export class AdministrationService {
   }
 
   getAllAdmins(id: number): Observable<CompanyAdmin[]> {
-    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${id}`);
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/${id}/admins`);
   }
 
   changePassword(id: number, pass: string): Observable<Boolean> {
     return this.http.put<Boolean>(environment.apiHost + `users/password/${id}`, pass);
+  }
+
+  getEquipment(id: number): Observable<Equipment[]> {
+    return this.http.get<Equipment[]>(environment.apiHost + `companies/${id}/equipment`);
+  }
+
+  updateEquipmentInCompany(id: number, equipment: Equipment[]): Observable<any> {
+    return this.http.put<any>(environment.apiHost + `companies/update/${id}/equipment`, equipment);
   }
 }

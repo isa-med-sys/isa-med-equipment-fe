@@ -10,7 +10,7 @@ import { Login } from '../model/login.model';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  
+
   errorMessage: string = '';
 
   constructor(
@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(login).subscribe({
         next: () => {
-          if(this.authService.user$.value.role == 'SYSTEM_ADMIN') { //brgl
+          if(this.authService.user$.value.role == 'SYSTEM_ADMIN' || this.authService.user$.value.role == 'COMPANY_ADMIN') {
             this.authService.getPasswordChanged(this.authService.user$.value.id).subscribe({
               next: (result) => {
                 if(!result)

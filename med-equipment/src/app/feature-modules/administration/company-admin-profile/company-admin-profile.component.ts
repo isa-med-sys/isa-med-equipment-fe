@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CompanyAdmin } from "../../../shared/model/company-admin";
 import { AuthService } from "../../../authentication/auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AdministrationService } from '../administration.service';
+import { MatTableDataSource } from "@angular/material/table";
+import { Equipment } from "../../../shared/model/equipment";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -20,8 +23,32 @@ export class CompanyAdminProfileComponent {
   errorMessage: string = '';
   admins: CompanyAdmin[] = [];
 
+  // Equipment list
+  displayedColumns: string[] = ['quantity', 'name', 'description', 'type', 'actions'];
+  dataSource: MatTableDataSource<Equipment>;
+  page: number = 0;
+  size: number = 5;
+  totalEquipment = 0;
+
+  showFilter: boolean = false;
+  searchForm: FormGroup;
+  name: string = '';
+  type: string = '';
+  rating: number = 0;
+
+  equipment: Equipment[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
+
+    this.dataSource = new MatTableDataSource<Equipment>();
+    this.searchForm = this.fb.group({
+      name: [''],
+      type: [''],
+      rating: ['']
+    });
   }
 
   ngOnInit() {
@@ -36,6 +63,8 @@ export class CompanyAdminProfileComponent {
               this.admins = result;
             }
           });
+
+          this.loadEquipment();
         },
         error: (err) => {
           console.error('Error fetching admin profile:', err);
@@ -56,12 +85,6 @@ export class CompanyAdminProfileComponent {
       currentPassword: ['', Validators.required],
       newPassword: [''],
       phoneNumber: [this.admin.phoneNumber, Validators.required],
-      // address: this.fb.group({
-      //   street: [this.admin.address.street],
-      //   streetNumber: [this.admin.address.streetNumber],
-      //   country: [this.admin.address.country],
-      //   city: [this.admin.address.city]
-      // })
     });
   }
 
@@ -147,5 +170,61 @@ export class CompanyAdminProfileComponent {
     this.initializeCompanyForm();
     this.isEditableCompany = !this.isEditableCompany;
     this.errorMessage = '';
+  }
+
+  searchEquipment(): void {
+
+    this.page = 0;
+    this.name = this.searchForm.get('name')?.value;
+    this.type = this.searchForm.get('type')?.value;
+    this.rating = this.searchForm.get('rating')?.value;
+
+    this.paginator.firstPage();
+    this.loadEquipment();
+  }
+
+  onPageChange(event: PageEvent) {
+
+    this.size = event.pageSize;
+    this.page = event.pageIndex;
+    this.loadEquipment();
+  }
+
+  clearAll() {
+
+    this.searchForm.reset();
+    this.searchForm.get('type')?.setValue('');
+    this.searchEquipment();
+  }
+
+  loadEquipment(): void {
+
+    this.administrationService.getEquipment(this.admin.company.id).subscribe(result => {
+      this.equipment = result;
+    })
+  }
+
+  addNewEquipment() {
+    console.log("Adding new equipment");
+  }
+
+  editEquipment(eq: Equipment) {
+    console.log("Edit: " + eq.name);
+  }
+
+  deleteEquipment(eq: Equipment) {
+
+    const index = this.equipment.indexOf(eq);
+
+    if (index !== -1) {
+      this.equipment.splice(index, 1);
+      this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
+
+        this.loadEquipment();
+        console.log("Deleted: " + eq.name);
+      });
+    } else {
+      console.log("Element not found in the list.");
+    }
   }
 }

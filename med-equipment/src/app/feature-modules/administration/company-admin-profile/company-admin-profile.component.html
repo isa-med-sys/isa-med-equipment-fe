@@ -81,24 +81,6 @@
             <mat-label>Phone number</mat-label>
             <input matInput formControlName="phoneNumber" type="text" />
           </mat-form-field>
-<!--          <div formGroupName="address" class="form">-->
-<!--            <mat-form-field>-->
-<!--              <mat-label>Street</mat-label>-->
-<!--              <input matInput formControlName="street" type="text" />-->
-<!--            </mat-form-field>-->
-<!--            <mat-form-field>-->
-<!--              <mat-label>Street number</mat-label>-->
-<!--              <input matInput formControlName="streetNumber" type="text" />-->
-<!--            </mat-form-field>-->
-<!--            <mat-form-field>-->
-<!--              <mat-label>Country</mat-label>-->
-<!--              <input matInput formControlName="country" type="text" />-->
-<!--            </mat-form-field>-->
-<!--            <mat-form-field>-->
-<!--              <mat-label>City</mat-label>-->
-<!--              <input matInput formControlName="city" type="text" />-->
-<!--            </mat-form-field>-->
-<!--          </div>-->
           <mat-form-field>
             <mat-label>New Password</mat-label>
             <input matInput formControlName="newPassword" type="password" />
@@ -120,9 +102,81 @@
     <p *ngFor="let a of admins">{{ a.name }} {{ a.surname }}</p>
   </div>
 
-  <div class="equipment" *ngIf="admin">
-    <h3>Equipment</h3>
-    <p *ngFor="let e of admin.company.equipment">Name: {{ e.name }}, Type: {{ e.type }}, Price: {{ e.price }}</p>
+<!--  <div class="equipment" *ngIf="admin">-->
+<!--    <h3>Equipment</h3>-->
+<!--    <p *ngFor="let e of admin.company.equipment">Name: {{ e.name }}, Type: {{ e.type }}, Price: {{ e.price }}</p>-->
+<!--  </div>-->
+
+  <div class="mat-elevation-z8">
+    <mat-expansion-panel class="search-header" [expanded]="showFilter">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Search</mat-panel-title>
+      </mat-expansion-panel-header>
+      <form [formGroup]="searchForm" (ngSubmit)="searchEquipment()">
+        <div class="filter-form-row">
+          <label for="name">Name:</label>
+          <input type="text" id="name" formControlName="name">
+        </div>
+        <div class="filter-form-row">
+          <label for="type">Type:</label>
+          <select id="type" formControlName="type">
+            <option value="">All Types</option>
+            <option value="TYPE1">Type 1</option>
+            <option value="TYPE2">Type 2</option>
+            <option value="TYPE3">Type 3</option>
+          </select>
+        </div>
+        <div class="filter-form-row">
+          <label for="rating">Rating:</label>
+          <input type="number" id="rating" formControlName="rating" min="0" max="5">
+        </div>
+        <button type="submit">Search</button>
+        <button type="button" (click)="clearAll()">Clear All</button>
+      </form>
+    </mat-expansion-panel>
+
+    <button mat-raised-button color="primary" (click)="addNewEquipment()">Add New Equipment</button>
+
+    <table mat-table [dataSource]="equipment">
+
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+        <td mat-cell *matCellDef="let eq">{{ eq.quantity }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let eq">{{ eq.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <td mat-cell *matCellDef="let eq">{{ eq.description }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let eq">{{ eq.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let eq">
+          <button mat-icon-button color="primary" (click)="editEquipment(eq)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteEquipment(eq)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+<!--    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalEquipment" showFirstLastButtons-->
+<!--                   (page)="onPageChange($event)"></mat-paginator>-->
   </div>
 
 </div>
