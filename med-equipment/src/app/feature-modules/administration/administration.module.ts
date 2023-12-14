@@ -7,6 +7,9 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
 import { RegisteredUserProfileComponent } from './registered-user-profile/registered-user-profile.component';
 import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,13 +18,16 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     SystemAdminProfileComponent,
     RegisteredUserProfileComponent,
     ChangePasswordComponent,
-    CompanyAdminProfileComponent
+    CompanyAdminProfileComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FullCalendarModule,
+    RouterModule
   ],
   exports: [
     SystemAdminProfileComponent,

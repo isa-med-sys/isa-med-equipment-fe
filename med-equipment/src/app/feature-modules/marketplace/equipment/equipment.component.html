@@ -54,6 +54,27 @@
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalEquipment" showFirstLastButtons
         (page)="onPageChange($event)"></mat-paginator>
+    
+    <table *ngIf="showList" mat-table [dataSource]="companies">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let c">{{ c.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="loc">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+            <td mat-cell *matCellDef="let c">{{ c.address.city }}, {{ c.address.country }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+            <td mat-cell *matCellDef="let c">{{ c.rating }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['name', 'loc', 'rating']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'loc', 'rating'];"></tr>
+    </table>
 </div>
 
 <!-- <div>
