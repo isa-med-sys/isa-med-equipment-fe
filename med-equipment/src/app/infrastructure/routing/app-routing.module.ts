@@ -10,6 +10,7 @@ import { SystemAdminProfileComponent } from 'src/app/feature-modules/administrat
 import { CompanySearchComponent } from 'src/app/feature-modules/company/company-search/company-search.component';
 import { ChangePasswordComponent } from 'src/app/feature-modules/administration/change-password/change-password.component';
 import { CompanyAdminProfileComponent } from 'src/app/feature-modules/administration/company-admin-profile/company-admin-profile.component';
+import { CalendarComponent } from 'src/app/feature-modules/administration/calendar/calendar.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'change-password', component: ChangePasswordComponent },
   { path: 'admin/profile', component: SystemAdminProfileComponent},
   { path: 'company-admin/profile', component: CompanyAdminProfileComponent },
+  { path: 'calendar', component: CalendarComponent },
   { path: 'companies', component: CompanySearchComponent },
   { path: 'company/:id', component: CompanyProfileComponent },
 ];

@@ -54,6 +54,6 @@ export class MarketplaceService {
     if (rating !== undefined && rating !== null) {
       params = params.set('rating', rating.toString());
     }
-    return this.http.get<PagedResults<Equipment>>(environment.apiHost + 'equipment/rerna', { params });
+    return this.http.get<PagedResults<Equipment>>(environment.apiHost + 'equipment', { params });
   }
 }

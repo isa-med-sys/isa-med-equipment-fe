@@ -3,7 +3,6 @@ import { MarketplaceService } from '../marketplace.service';
 import { Equipment } from '../../../shared/model/equipment';
 import { Company } from 'src/app/shared/model/company';
 import { AuthService } from 'src/app/authentication/auth.service';
-import { User } from 'src/app/authentication/model/user.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,21 +27,19 @@ export class EquipmentComponent implements AfterViewInit {
   rating: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // bacio bih svemir zeku
-  // equipment: Equipment[] = [];
-  // companies: Company[] = [];
-  // isShowingCompanies: boolean = false;
-  // rating: number = 1;
-  // name: string = '';
-  // type: string = 'ALL';
+  //companies: Company[] = [];
+  companies: MatTableDataSource<Company>;
+  //selectedEquipment: Equipment;
+  showList: boolean = false;
   userId?: number;
   userRole?: string;
 
-  constructor(private service: MarketplaceService, authService: AuthService, private formBuilder: FormBuilder) { //router
+  constructor(private service: MarketplaceService, authService: AuthService, private formBuilder: FormBuilder) {
     this.userId = authService.user$.value.id;
     this.userRole = authService.user$.value.role;
 
     this.dataSource = new MatTableDataSource<Equipment>();
+    this.companies = new MatTableDataSource<Company>();
     this.searchForm = this.formBuilder.group({
       name: [''],
       type: [''],
@@ -59,6 +56,7 @@ export class EquipmentComponent implements AfterViewInit {
       this.dataSource = new MatTableDataSource<Equipment>();
       this.dataSource.data = result.content;
       this.totalEquipment = result.totalElements;
+      //getuj i kompanije
     });
   }
 
@@ -79,11 +77,24 @@ export class EquipmentComponent implements AfterViewInit {
   }
 
   onRowClick(equipment: Equipment): void {
-    //console.log(company)
-    //this.router.navigate(['company', company.id]);
+    console.log(equipment);
+    //this.selectedEquipment = equipment;
+    this.showList = true;
+
+    this.service.getCompaniesByEquipment(equipment.id).subscribe({
+      next: (result: Company[]) => {
+        //this.companies = result;
+        this.companies = new MatTableDataSource<Company>();
+        this.companies.data = result;
+      },
+      error: (err: any) => {
+        console.log(err)
+      }
+    })
   }
 
   clearAll() {
+    this.showList = false;
     this.searchForm.reset();
     this.searchForm.get('type')?.setValue('');
     this.searchEquipment();

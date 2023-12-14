@@ -10,6 +10,7 @@ import { CompanyModule } from './feature-modules/company/company.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MarketplaceModule } from './feature-modules/marketplace/marketplace.module';
 import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
     MarketplaceModule,
     CompanyModule,
     AdministrationModule,
+    FullCalendarModule,
   ],
   providers: [
     {

@@ -114,7 +114,7 @@
       </form>
     </div>
   </div>
-
+  <button mat-raised-button color="accent" [routerLink]="['../../calendar']">Go to Calendar</button>
   <div class="admins" *ngIf="admin">
     <h3>Admins</h3>
     <p *ngFor="let a of admins">{{ a.name }} {{ a.surname }}</p>
