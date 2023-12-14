@@ -18,7 +18,7 @@
             <button (click)="addToReservation(e)" class="action-button add" title="Reserve equipment">Reserve</button>
           </td>
           <td>
-            <button (click)="removeFromReservation(e)" class="action-button remove" title="Remove from reservation">Remove</button>
+            <button *ngIf="isEquipmentInReservations(e)" (click)="removeFromReservation(e)" class="action-button remove" title="Remove from reservation">Remove</button>
           </td>
         </tr>
       </tbody>

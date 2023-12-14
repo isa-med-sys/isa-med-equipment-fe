@@ -147,4 +147,8 @@ export class CompanyProfileComponent implements OnInit {
   isReservationValid(): boolean {
     return this.reservations.length > 0 && !!this.selectedTimeSlotId;
   }
+
+  isEquipmentInReservations(equipment: Equipment): boolean {
+    return this.reservations.includes(equipment);
+  }
 }
