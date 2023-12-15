@@ -6,8 +6,9 @@ import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
-import {Equipment} from "../../shared/model/equipment";
-import {en} from "@fullcalendar/core/internal-common";
+import { Equipment } from "../../shared/model/equipment";
+import { en } from "@fullcalendar/core/internal-common";
+import { Calendar } from 'src/app/shared/model/calendar';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class AdministrationService {
   }
 
   getAdminsByCompanyId(companyId: number): Observable<CompanyAdmin[]> {
-    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${companyId}`);
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/${companyId}/admins`);
   }
 
   getRegisteredUser(id: number): Observable<RegisteredUser> {
@@ -78,5 +79,9 @@ export class AdministrationService {
 
   updateEquipment(id: number, equipment: Equipment): Observable<Equipment> {
     return this.http.put<Equipment>(environment.apiHost + `equipment/update/${id}`, equipment);
+  }
+  
+  getCalendar(id: number): Observable<Calendar> {
+    return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
   }
 }

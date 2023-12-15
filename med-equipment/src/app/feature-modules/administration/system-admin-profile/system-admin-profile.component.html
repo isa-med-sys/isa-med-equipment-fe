@@ -1,23 +1,11 @@
 <div class="mat-elevation-z8">
-    <!-- <button (click)="addNewCompany()">Add New Company</button>
-    <div *ngFor="let company of companies">
-        <li>{{ company.name }} {{ company.description }} {{company.id}}</li>
-      
-        <ul>
-            <li *ngFor="let admin of company.admins">
-              admin: {{ admin.name }} {{ admin.surname }} ({{ admin.email }})
-            </li>
-          </ul>
-      
-        <button (click)="addNewAdmin(company.id)">Add New Admin</button>
-    </div> -->
     <button (click)="addNewSysAdmin()">Add New SysAdmin</button>
     <table>
         <thead>
           <tr>
             <th>Company Name</th>
             <th>Description</th>
-            <th>Company ID</th>
+            <th>Admins</th>
             <th><button (click)="addNewCompany()">Add New Company</button></th>
           </tr>
         </thead>
@@ -26,17 +14,18 @@
             <tr>
               <td>{{ company.name }}</td>
               <td>{{ company.description }}</td>
-              <td>{{ company.id }}</td>
+              <td>
+                    <p *ngFor="let admin of company.admins">
+                        {{ admin.name }} {{ admin.surname }} {{ admin.email }}
+                    </p>
+              </td>
               <td>
                 <button (click)="addNewAdmin(company.id)">Add New Admin</button>
               </td>
             </tr>
-            <tr *ngFor="let admin of company.admins">
-              <td></td><td colspan="3">{{ admin.name }} {{ admin.surname }} {{ admin.email }}</td>
-            </tr>
           </ng-container>
         </tbody>
-      </table>
+    </table>
 
     <div  *ngIf="isCompanyFormVisible">
         <h2>Company Creation</h2>

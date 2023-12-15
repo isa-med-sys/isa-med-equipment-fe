@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Login } from '../model/login.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'xp-login',
@@ -15,8 +16,9 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) { }
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required]),
@@ -35,20 +37,26 @@ export class LoginComponent {
           if(this.authService.user$.value.role == 'SYSTEM_ADMIN' || this.authService.user$.value.role == 'COMPANY_ADMIN') {
             this.authService.getPasswordChanged(this.authService.user$.value.id).subscribe({
               next: (result) => {
-                if(!result)
+                if (!result)
                   this.router.navigate(['change-password']);
               },
               error: (errorMessage) => {
-                this.errorMessage = errorMessage;
+                this.openSnackBar(errorMessage);
               }
             });
           }
           this.router.navigate(['/']);
         },
         error: (errorMessage) => {
-          this.errorMessage = errorMessage;
+          this.openSnackBar(errorMessage);
         }
       });
     }
+  }
+
+  private openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 30000,
+    });
   }
 }

@@ -7,8 +7,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-
-
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,9 @@ import { MatSelectModule } from '@angular/material/select';
     HttpClientModule,
     MatIconModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    FullCalendarModule,
+    MatSnackBarModule
   ],
   exports: [
     CompanySearchComponent,
