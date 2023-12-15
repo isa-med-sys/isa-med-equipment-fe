@@ -34,6 +34,7 @@ export class CompanyAdminProfileComponent {
   name: string = '';
   type: string = '';
   rating: number = 0;
+  filteredEquipment: Equipment[] = [];
 
   equipment: Equipment[] = [];
 
@@ -190,12 +191,26 @@ export class CompanyAdminProfileComponent {
   // Equipment
   searchEquipment(): void {
 
-    this.name = this.searchForm.get('name')?.value;
-    this.type = this.searchForm.get('type')?.value;
-    this.rating = this.searchForm.get('rating')?.value;
+    // this.name = this.searchForm.get('name')?.value;
+    // this.type = this.searchForm.get('type')?.value;
+    // this.rating = this.searchForm.get('rating')?.value;
+    //
+    // this.loadEquipment();
 
-    this.paginator.firstPage();
-    this.loadEquipment();
+    const nameFilter = this.searchForm.get('name')?.value?.toLowerCase();
+    const typeFilter = this.searchForm.get('type')?.value;
+    const ratingFilter = this.searchForm.get('rating')?.value;
+
+    this.filteredEquipment = this.equipment.filter(equipment => {
+      const matchesName = !nameFilter || equipment.name.toLowerCase().includes(nameFilter);
+      const matchesType = !typeFilter || equipment.type === typeFilter;
+      const matchesRating = !ratingFilter || equipment.rating >= ratingFilter;
+
+      return matchesName && matchesType && matchesRating;
+    });
+
+    this.dataSource = new MatTableDataSource<Equipment>();
+    this.dataSource.data = this.filteredEquipment;
   }
 
   onPageChange(event: PageEvent) {
