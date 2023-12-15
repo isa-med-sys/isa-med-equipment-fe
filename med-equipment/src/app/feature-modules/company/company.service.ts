@@ -5,6 +5,13 @@ import { Company } from "../../shared/model/company";
 import { environment } from "../../../env/environment";
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { Equipment } from "../../shared/model/equipment";
+import { Reservation } from 'src/app/shared/model/reservation';
+import { TimeSlot } from 'src/app/shared/model/timeslot';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { CalendarOptions, DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +30,16 @@ export class CompanyService {
   }
 
   getEquipment(id: number): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>(environment.apiHost + `companies/all-equipment/${id}`);
+    return this.http.get<Equipment[]>(environment.apiHost + `companies/${id}/equipment/available`);
+  }
+
+  makeReservation(reservation: Reservation): Observable<Reservation> {
+    return this.http.post<Reservation>(environment.apiHost + `reservations`, reservation);
+  }
+
+  getAvailableTimeSlots(companyId: number): Observable<TimeSlot[]> {
+    const params = new HttpParams().set('companyId', companyId.toString());
+    return this.http.get<TimeSlot[]>(environment.apiHost + `calendars/time-slots/free-predefined`, { params });
   }
 
   private buildParams(name: string, city: string, rating: number, page: number, size: number): HttpParams {

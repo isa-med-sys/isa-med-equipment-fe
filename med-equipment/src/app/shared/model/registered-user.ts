@@ -13,4 +13,3 @@ export interface RegisteredUser {
     address: Address;
     penaltyPoints: number
 }
-

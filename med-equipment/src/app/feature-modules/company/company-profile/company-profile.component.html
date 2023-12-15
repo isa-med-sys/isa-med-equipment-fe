@@ -8,17 +8,33 @@
     <p class="rating">Rating: {{ company.rating }}</p>
   </div>
 
-  <!-- Add map component here if needed -->
-  <!-- <div class="map-container">
-    Your map component goes here
-  </div> -->
+  <div class="equipment-container">
+    <h2>Available Equipment</h2>
+    <table class="equipment-table">
+      <tbody>
+        <tr *ngFor="let e of equipment" class="equipment-item">
+          <td>{{ e.name }}</td>
+          <td>
+            <button (click)="addToReservation(e)" class="action-button add" title="Reserve equipment">Reserve</button>
+          </td>
+          <td>
+            <button *ngIf="isEquipmentInReservations(e)" (click)="removeFromReservation(e)" class="action-button remove" title="Remove from reservation">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <div>
-    <h2>Equipment List</h2>
-    <ul class="equipment-list">
-      <li *ngFor="let e of equipment" class="equipment-item">
-        {{ e.name }}
+  <div *ngIf="reservations && reservations.length > 0" class="reservation-section">
+    <h2>Reservation List</h2>
+    <ul class="reservation-list">
+      <li *ngFor="let r of reservations" class="reservation-item">
+        {{ r.name }}
       </li>
     </ul>
+    <button (click)="finalizeReservation()" class="finalize-reservation-button" title="Reserve Equipment">Reserve Equipment</button>
+  </div>
+  <div *ngIf="reservations && reservations.length > 0"  class="calendar-container">
+    <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
 </div>
