@@ -146,7 +146,7 @@ export class SystemAdminProfileComponent {
   }
 
   getData(): void {
-    this.administrationService.getCompanies().subscribe({
+    this.administrationService.getCompanies().subscribe({ //pgr izgl
       next: (companies) => {
         this.companies = companies;
   

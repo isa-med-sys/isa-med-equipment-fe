@@ -9,5 +9,5 @@ export interface CompanyAdmin {
   newPassword: string;
   phoneNumber: string;
   company: Company;
-  companyId: number; //rdd
+  companyId: number;
 }

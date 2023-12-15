@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { AdministrationService } from '../../administration/administration.service';
 
 @Component({
   selector: 'app-equipment',
@@ -27,14 +28,13 @@ export class EquipmentComponent implements AfterViewInit {
   rating: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  //companies: Company[] = [];
   companies: MatTableDataSource<Company>;
-  //selectedEquipment: Equipment;
   showList: boolean = false;
-  userId?: number;
+  userId!: number;
   userRole?: string;
+  companyId?: number;
 
-  constructor(private service: MarketplaceService, authService: AuthService, private formBuilder: FormBuilder) {
+  constructor(private service: MarketplaceService, authService: AuthService, private administrationService: AdministrationService, private formBuilder: FormBuilder) {
     this.userId = authService.user$.value.id;
     this.userRole = authService.user$.value.role;
 
@@ -48,16 +48,35 @@ export class EquipmentComponent implements AfterViewInit {
   }
   
   ngAfterViewInit(): void {
-    this.loadEquipment();
+    if(this.userRole == 'COMPANY_ADMIN') {
+      this.administrationService.getCompanyAdmin(this.userId).subscribe({
+        next: (user) => {
+          this.companyId = user.company.id;
+          this.loadEquipment();
+        },
+        error: (err) => {
+          console.error('Error fetching admin profile:', err);
+        }
+      });
+    }
+    else this.loadEquipment();
   }
 
   loadEquipment(): void {
-    this.service.getEquipmentTemp(this.name, this.type, this.rating, this.page, this.size).subscribe(result => {
-      this.dataSource = new MatTableDataSource<Equipment>();
-      this.dataSource.data = result.content;
-      this.totalEquipment = result.totalElements;
-      //getuj i kompanije
-    });
+    if(this.userRole != 'COMPANY_ADMIN') {
+      this.service.getEquipmentTemp(this.name, this.type, this.rating, this.page, this.size).subscribe(result => {
+        this.dataSource = new MatTableDataSource<Equipment>();
+        this.dataSource.data = result.content;
+        this.totalEquipment = result.totalElements;
+      });
+    }
+    else if(this.companyId) {
+      this.service.getEquipmentTempCa(this.name, this.type, this.rating, this.companyId, this.page, this.size).subscribe(result => {
+        this.dataSource = new MatTableDataSource<Equipment>();
+        this.dataSource.data = result.content;
+        this.totalEquipment = result.totalElements;
+      });
+    }
   }
 
   searchEquipment(): void {
@@ -77,20 +96,21 @@ export class EquipmentComponent implements AfterViewInit {
   }
 
   onRowClick(equipment: Equipment): void {
-    console.log(equipment);
-    //this.selectedEquipment = equipment;
-    this.showList = true;
+    if(this.userRole != 'COMPANY_ADMIN') {
 
-    this.service.getCompaniesByEquipment(equipment.id).subscribe({
-      next: (result: Company[]) => {
-        //this.companies = result;
-        this.companies = new MatTableDataSource<Company>();
-        this.companies.data = result;
-      },
-      error: (err: any) => {
-        console.log(err)
-      }
-    })
+      console.log(equipment);
+      this.showList = true;
+      
+      this.service.getCompaniesByEquipment(equipment.id).subscribe({
+        next: (result: Company[]) => {
+          this.companies = new MatTableDataSource<Company>();
+          this.companies.data = result;
+        },
+        error: (err: any) => {
+          console.log(err)
+        }
+      })
+    }
   }
 
   clearAll() {
@@ -99,17 +119,4 @@ export class EquipmentComponent implements AfterViewInit {
     this.searchForm.get('type')?.setValue('');
     this.searchEquipment();
   }
-
-  // onShowCompanies(equipmentId: number): void {
-  //   this.isShowingCompanies = true;
-  //   this.service.getCompaniesByEquipment(equipmentId).subscribe({
-  //     next: (result: Company[]) => {
-  //       this.companies = result;
-  //     },
-  //     error: (err: any) => {
-  //       console.log(err)
-  //     }
-  //   })
-  // } sow za kompani admina i get eq fale
-
 }
