@@ -12,6 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class LoginComponent {
 
+  errorMessage: string = '';
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -32,7 +34,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(login).subscribe({
         next: () => {
-          if (this.authService.user$.value.role == 'SYSTEM_ADMIN') {
+          if(this.authService.user$.value.role == 'SYSTEM_ADMIN' || this.authService.user$.value.role == 'COMPANY_ADMIN') {
             this.authService.getPasswordChanged(this.authService.user$.value.id).subscribe({
               next: (result) => {
                 if (!result)
