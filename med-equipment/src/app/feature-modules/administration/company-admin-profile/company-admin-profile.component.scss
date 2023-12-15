@@ -59,7 +59,40 @@
       }
     }
   }
+
+  .add-eq-button {
+    margin: 8px;
+  }
 }
+
+.equipment-form {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: #f5f5f5;
+
+  .form-fields {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    button {
+      width: 48%;
+    }
+  }
+}
+
 
 .mat-elevation-z8 {
   padding: 20px;

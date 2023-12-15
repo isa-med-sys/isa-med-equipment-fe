@@ -1,11 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { CompanyAdmin } from "../../../shared/model/company-admin";
-import { AuthService } from "../../../authentication/auth.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AdministrationService } from '../administration.service';
-import { MatTableDataSource } from "@angular/material/table";
-import { Equipment } from "../../../shared/model/equipment";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import {Component, ViewChild} from '@angular/core';
+import {CompanyAdmin} from "../../../shared/model/company-admin";
+import {AuthService} from "../../../authentication/auth.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AdministrationService} from '../administration.service';
+import {MatTableDataSource} from "@angular/material/table";
+import {Equipment} from "../../../shared/model/equipment";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {EquipmentType} from "../../../shared/model/equipment-type.enum";
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -20,15 +21,13 @@ export class CompanyAdminProfileComponent {
   isEditableCompany: boolean = false;
   adminForm!: FormGroup;
   companyForm!: FormGroup;
+  equipmentForm!: FormGroup;
   errorMessage: string = '';
   admins: CompanyAdmin[] = [];
 
   // Equipment list
   displayedColumns: string[] = ['quantity', 'name', 'description', 'type', 'actions'];
   dataSource: MatTableDataSource<Equipment>;
-  page: number = 0;
-  size: number = 5;
-  totalEquipment = 0;
 
   showFilter: boolean = false;
   searchForm: FormGroup;
@@ -37,6 +36,10 @@ export class CompanyAdminProfileComponent {
   rating: number = 0;
 
   equipment: Equipment[] = [];
+
+  showAddForm: boolean = false;
+  showEditForm: boolean = false;
+  selectedEquipment!: Equipment;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -76,6 +79,7 @@ export class CompanyAdminProfileComponent {
   initializeForm() {
     this.initializeAdminForm();
     this.initializeCompanyForm();
+    this.initializeEquipmentForm();
   }
 
   initializeAdminForm() {
@@ -101,6 +105,17 @@ export class CompanyAdminProfileComponent {
       }),
       equipment: [this.admin.company.equipment]
     });
+  }
+
+  initializeEquipmentForm() {
+    this.equipmentForm = this.fb.group({
+      name: ["", Validators.required],
+      description: ["", Validators.required],
+      type: ["", Validators.required],
+      rating: ["", [Validators.required, Validators.min(0), Validators.max(5)]],
+      price: ["", [Validators.required, Validators.min(0)]],
+      quantity: ["", [Validators.required, Validators.min(0)]],
+    })
   }
 
   toggleEditModeAdmin() {
@@ -172,9 +187,9 @@ export class CompanyAdminProfileComponent {
     this.errorMessage = '';
   }
 
+  // Equipment
   searchEquipment(): void {
 
-    this.page = 0;
     this.name = this.searchForm.get('name')?.value;
     this.type = this.searchForm.get('type')?.value;
     this.rating = this.searchForm.get('rating')?.value;
@@ -185,8 +200,6 @@ export class CompanyAdminProfileComponent {
 
   onPageChange(event: PageEvent) {
 
-    this.size = event.pageSize;
-    this.page = event.pageIndex;
     this.loadEquipment();
   }
 
@@ -201,15 +214,24 @@ export class CompanyAdminProfileComponent {
 
     this.administrationService.getEquipment(this.admin.company.id).subscribe(result => {
       this.equipment = result;
+      this.dataSource = new MatTableDataSource<Equipment>();
+      this.dataSource.data = this.equipment;
+      console.log("Loaded: ");
+      console.log(this.equipment);
     })
   }
 
   addNewEquipment() {
-    console.log("Adding new equipment");
+    this.initializeEquipmentForm();
+    this.showAddForm = true;
+    this.showEditForm = false;
   }
 
   editEquipment(eq: Equipment) {
-    console.log("Edit: " + eq.name);
+    this.selectedEquipment = eq;
+    this.showAddForm = false;
+    this.updateEquipmentForm(this.selectedEquipment);
+    this.showEditForm = true;
   }
 
   deleteEquipment(eq: Equipment) {
@@ -226,5 +248,82 @@ export class CompanyAdminProfileComponent {
     } else {
       console.log("Element not found in the list.");
     }
+  }
+
+  onSubmitEq() {
+    if (this.equipmentForm.valid) {
+      console.log("Adding new equipment");
+
+      let e : Equipment = {
+        id: 0,
+        name: "Ime",
+        description: "Opis",
+        type: EquipmentType.TYPE1,
+        rating: 0,
+        price: 175,
+        quantity: 10,
+        companies: []
+      };
+
+      this.administrationService.addEquipment(e).subscribe(result => {
+        e = result;
+        this.equipment.push(e);
+        console.log(this.equipment);
+
+        this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
+
+          this.loadEquipment();
+          console.log(this.equipment);
+          console.log("Equipment added.");
+          this.showAddForm = false;
+        });
+      });
+    }
+  }
+
+  onEditEq() {
+    const index = this.equipment.findIndex(e => e.id === this.selectedEquipment.id);
+
+    if (index !== -1) {
+      const updatedEquipment = [...this.equipment];
+
+      updatedEquipment[index] = {
+        ...updatedEquipment[index],
+        name: this.equipmentForm.get('name')?.value,
+        description: this.equipmentForm.get('description')?.value,
+        type: this.equipmentForm.get('type')?.value,
+        rating: this.equipmentForm.get('rating')?.value,
+        price: this.equipmentForm.get('price')?.value,
+        quantity: this.equipmentForm.get('quantity')?.value,
+      };
+
+      this.equipment = updatedEquipment;
+
+      console.log(this.equipment);
+
+      this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
+
+        this.loadEquipment();
+        console.log(this.equipment);
+        console.log("Equipment updated.");
+        this.showEditForm = false;
+      });
+    }
+  }
+
+  updateEquipmentForm(e: Equipment) {
+    this.equipmentForm = this.fb.group({
+      name: [e.name, Validators.required],
+      description: [e.description, Validators.required],
+      type: [e.type, Validators.required],
+      rating: [e.rating, [Validators.required, Validators.min(0), Validators.max(5)]],
+      price: [e.price, [Validators.required, Validators.min(0)]],
+      quantity: [e.quantity, [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  discardForm() {
+    this.showAddForm = false;
+    this.showEditForm = false;
   }
 }
