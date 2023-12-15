@@ -6,6 +6,7 @@ import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
+import { Calendar } from 'src/app/shared/model/calendar';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class AdministrationService {
   }
 
   getAdminsByCompanyId(companyId: number): Observable<CompanyAdmin[]> {
-    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/admins/${companyId}`);
+    return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/${companyId}/admins`);
   }
 
   getRegisteredUser(id: number): Observable<RegisteredUser> {
@@ -60,5 +61,9 @@ export class AdministrationService {
 
   changePassword(id: number, pass: string): Observable<Boolean> {
     return this.http.put<Boolean>(environment.apiHost + `users/password/${id}`, pass);
+  }
+
+  getCalendar(id: number): Observable<Calendar> {
+    return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
   }
 }
