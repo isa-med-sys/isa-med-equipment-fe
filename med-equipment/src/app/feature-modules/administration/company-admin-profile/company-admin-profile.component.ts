@@ -113,7 +113,6 @@ export class CompanyAdminProfileComponent {
       name: ["", Validators.required],
       description: ["", Validators.required],
       type: ["", Validators.required],
-      rating: ["", [Validators.required, Validators.min(0), Validators.max(5)]],
       price: ["", [Validators.required, Validators.min(0)]],
       quantity: ["", [Validators.required, Validators.min(0)]],
     })
@@ -191,12 +190,6 @@ export class CompanyAdminProfileComponent {
   // Equipment
   searchEquipment(): void {
 
-    // this.name = this.searchForm.get('name')?.value;
-    // this.type = this.searchForm.get('type')?.value;
-    // this.rating = this.searchForm.get('rating')?.value;
-    //
-    // this.loadEquipment();
-
     const nameFilter = this.searchForm.get('name')?.value?.toLowerCase();
     const typeFilter = this.searchForm.get('type')?.value;
     const ratingFilter = this.searchForm.get('rating')?.value;
@@ -253,6 +246,8 @@ export class CompanyAdminProfileComponent {
 
     const index = this.equipment.indexOf(eq);
 
+    // PROVERITI DA LI JE OPREMA REZERVISANA A NE PREUZETA
+
     if (index !== -1) {
       this.equipment.splice(index, 1);
       this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
@@ -271,12 +266,12 @@ export class CompanyAdminProfileComponent {
 
       let e : Equipment = {
         id: 0,
-        name: "Ime",
-        description: "Opis",
-        type: EquipmentType.TYPE1,
+        name: this.equipmentForm.get('name')?.value,
+        description: this.equipmentForm.get('description')?.value,
+        type: this.equipmentForm.get('type')?.value,
         rating: 0,
-        price: 175,
-        quantity: 10,
+        price: this.equipmentForm.get('price')?.value,
+        quantity: this.equipmentForm.get('quantity')?.value,
         companies: []
       };
 
@@ -297,32 +292,35 @@ export class CompanyAdminProfileComponent {
   }
 
   onEditEq() {
-    const index = this.equipment.findIndex(e => e.id === this.selectedEquipment.id);
+    if (this.equipmentForm.valid) {
+      const index = this.equipment.findIndex(e => e.id === this.selectedEquipment.id);
 
-    if (index !== -1) {
-      const updatedEquipment = [...this.equipment];
+      if (index !== -1) {
+        const updatedEquipment = [...this.equipment];
 
-      updatedEquipment[index] = {
-        ...updatedEquipment[index],
-        name: this.equipmentForm.get('name')?.value,
-        description: this.equipmentForm.get('description')?.value,
-        type: this.equipmentForm.get('type')?.value,
-        rating: this.equipmentForm.get('rating')?.value,
-        price: this.equipmentForm.get('price')?.value,
-        quantity: this.equipmentForm.get('quantity')?.value,
-      };
+        updatedEquipment[index] = {
+          ...updatedEquipment[index],
+          name: this.equipmentForm.get('name')?.value,
+          description: this.equipmentForm.get('description')?.value,
+          type: this.equipmentForm.get('type')?.value,
+          price: this.equipmentForm.get('price')?.value,
+          quantity: this.equipmentForm.get('quantity')?.value,
+        };
 
-      this.equipment = updatedEquipment;
+        this.equipment = updatedEquipment;
 
-      console.log(this.equipment);
-
-      this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
-
-        this.loadEquipment();
         console.log(this.equipment);
-        console.log("Equipment updated.");
-        this.showEditForm = false;
-      });
+
+        this.administrationService.updateEquipment(this.equipment[index].id, this.equipment[index]).subscribe(result => {
+
+          console.log(result);
+
+          this.loadEquipment();
+          console.log(this.equipment);
+          console.log("Equipment updated.");
+          this.showEditForm = false;
+        });
+      }
     }
   }
 
@@ -331,7 +329,6 @@ export class CompanyAdminProfileComponent {
       name: [e.name, Validators.required],
       description: [e.description, Validators.required],
       type: [e.type, Validators.required],
-      rating: [e.rating, [Validators.required, Validators.min(0), Validators.max(5)]],
       price: [e.price, [Validators.required, Validators.min(0)]],
       quantity: [e.quantity, [Validators.required, Validators.min(0)]],
     });

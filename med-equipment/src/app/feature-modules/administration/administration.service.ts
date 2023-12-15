@@ -75,4 +75,8 @@ export class AdministrationService {
   addEquipment(equipment: Equipment): Observable<Equipment> {
     return this.http.post<Equipment>(environment.apiHost + `equipment`, equipment);
   }
+
+  updateEquipment(id: number, equipment: Equipment): Observable<Equipment> {
+    return this.http.put<Equipment>(environment.apiHost + `equipment/update/${id}`, equipment);
+  }
 }
