@@ -216,7 +216,7 @@ export class CalendarComponent {
         isFree: true,
       }
 
-      this.administrationService.addTimeSlot(tempTimeSlot).subscribe({
+      this.administrationService.addTimeSlot(this.admin.company.id, tempTimeSlot).subscribe({
         next: (result) => {
           tempTimeSlot = result;
           this.showForm = false;

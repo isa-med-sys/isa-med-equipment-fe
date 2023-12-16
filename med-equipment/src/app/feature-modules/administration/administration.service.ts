@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Company } from 'src/app/shared/model/company';
@@ -89,7 +89,8 @@ export class AdministrationService {
     return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
   }
 
-  addTimeSlot(timeSlot: TimeSlot): Observable<TimeSlot> {
-    return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot);
+  addTimeSlot(companyId: number, timeSlot: TimeSlot): Observable<TimeSlot> {
+    const params = new HttpParams().set('companyId', companyId.toString());
+    return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot, { params });
   }
 }
