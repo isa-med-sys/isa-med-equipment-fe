@@ -7,8 +7,8 @@ import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
 import { Equipment } from "../../shared/model/equipment";
-import { en } from "@fullcalendar/core/internal-common";
 import { Calendar } from 'src/app/shared/model/calendar';
+import {TimeSlot} from "../../shared/model/timeslot";
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +61,10 @@ export class AdministrationService {
     return this.http.get<CompanyAdmin[]>(environment.apiHost + `companies/${id}/admins`);
   }
 
+  getAllAdminIds(id: number): Observable<number[]> {
+    return this.http.get<number[]>(environment.apiHost + `companies/${id}/admin-ids`);
+  }
+
   changePassword(id: number, pass: string): Observable<Boolean> {
     return this.http.put<Boolean>(environment.apiHost + `users/password/${id}`, pass);
   }
@@ -80,8 +84,12 @@ export class AdministrationService {
   updateEquipment(id: number, equipment: Equipment): Observable<Equipment> {
     return this.http.put<Equipment>(environment.apiHost + `equipment/update/${id}`, equipment);
   }
-  
+
   getCalendar(id: number): Observable<Calendar> {
     return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
+  }
+
+  addTimeSlot(timeSlot: TimeSlot): Observable<TimeSlot> {
+    return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot);
   }
 }

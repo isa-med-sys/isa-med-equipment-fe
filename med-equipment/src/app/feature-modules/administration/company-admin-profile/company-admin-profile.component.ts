@@ -1,12 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
-import {CompanyAdmin} from "../../../shared/model/company-admin";
-import {AuthService} from "../../../authentication/auth.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AdministrationService} from '../administration.service';
-import {MatTableDataSource} from "@angular/material/table";
-import {Equipment} from "../../../shared/model/equipment";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {EquipmentType} from "../../../shared/model/equipment-type.enum";
+import { Component, ViewChild } from '@angular/core';
+import { CompanyAdmin } from "../../../shared/model/company-admin";
+import { AuthService } from "../../../authentication/auth.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AdministrationService } from '../administration.service';
+import { MatTableDataSource } from "@angular/material/table";
+import { Equipment } from "../../../shared/model/equipment";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-company-admin-profile',

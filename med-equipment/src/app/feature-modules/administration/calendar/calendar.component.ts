@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import { AdministrationService } from '../administration.service';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { Calendar } from 'src/app/shared/model/calendar';
+import {TimeSlot} from "../../../shared/model/timeslot";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-calendar',
@@ -74,11 +76,21 @@ export class CalendarComponent {
   };
   currentEvents: EventApi[] = [];
 
-  constructor(private changeDetector: ChangeDetectorRef, authService: AuthService, private administrationService: AdministrationService) {
+  constructor(private changeDetector: ChangeDetectorRef, authService: AuthService, private administrationService: AdministrationService, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
+
+    this.timeslotGroup = this.fb.group({
+      date: [''],
+      time: [''],
+      selectedAdmin: ['']
+    });
   }
 
   ngOnInit() {
+    this.initializeCalendar();
+  }
+
+  initializeCalendar() {
     if (this.adminId) {
       this.administrationService.getCompanyAdmin(this.adminId).subscribe({
         next: (user) => {
@@ -114,13 +126,13 @@ export class CalendarComponent {
       });
     }
   }
-  
+
   // handleDateSelect(selectInfo: DateSelectArg) {
   //   const title = prompt('Please enter a new title for your event');
   //   const calendarApi = selectInfo.view.calendar;
-    
+
   //   calendarApi.unselect(); // clear date selection
-    
+
   //   if (title) { //dodaj na bek
   //     calendarApi.addEvent({
   //       id: this.createEventId(),
@@ -147,4 +159,75 @@ export class CalendarComponent {
   //   this.currentEvents = events;
   //   this.changeDetector.detectChanges();
   // }
+
+  timeslotGroup: FormGroup;
+  adminsList: CompanyAdmin[] = [];
+  adminsListIds: number[] = [];
+  showForm: boolean = false;
+  errMessage: string = '';
+  showErr: boolean = false;
+
+  initializeTimeSlotFormGroup() {
+    this.timeslotGroup = this.fb.group({
+      date: ['', Validators.required],
+      time: ['', Validators.required],
+      selectedAdmin: ['', Validators.required]
+    });
+  }
+
+  addTimeSlot() {
+    this.initializeTimeSlotFormGroup();
+    this.showForm = true;
+    this.administrationService.getAllAdmins(this.admin.company.id).subscribe(result => {
+      this.adminsList = result;
+    });
+    this.administrationService.getAllAdminIds(this.admin.company.id).subscribe(result => {
+      this.adminsListIds = result;
+    });
+    this.errMessage = '';
+    this.showErr = false;
+  }
+
+  discardChanges() {
+    this.showForm = false;
+  }
+
+  createTimeSlot() {
+    if (this.timeslotGroup.valid) {
+      // Date
+      const dateString: string = this.timeslotGroup.get('date')?.value;
+      const selectedDate: Date = new Date(dateString);
+      // Time
+      const time: string = this.timeslotGroup.get('time')?.value;
+      const [hours, minutes] = time.split(':');
+      const selectedHours: number = parseInt(hours, 10);
+      const selectedMinutes: number = parseInt(minutes, 10);
+      // Admin
+      const tempAdmin: CompanyAdmin = this.timeslotGroup.get('selectedAdmin')?.value;
+      const index = this.adminsList.indexOf(tempAdmin);
+      const selectedAdminIdx = this.adminsListIds[index];
+
+      let tempTimeSlot: TimeSlot = {
+        id: 0,
+        admin: tempAdmin,
+        companyAdminId: selectedAdminIdx,
+        start: [selectedDate.getFullYear(), selectedDate.getMonth() + 1, selectedDate.getDate(), selectedHours, selectedMinutes],
+        duration: 30,
+        isFree: true,
+      }
+
+      this.administrationService.addTimeSlot(tempTimeSlot).subscribe({
+        next: (result) => {
+          tempTimeSlot = result;
+          this.showForm = false;
+          this.initializeCalendar();
+        },
+        error: (err) => {
+          console.error('Error occurred:', err);
+          this.showErr = true;
+          this.errMessage = err.error || 'An error occurred';
+        }
+      });
+    }
+  }
 }
