@@ -48,7 +48,7 @@ export class CompanyProfileComponent implements OnInit {
     selectOverlap: false,
     allDaySlot: false,
     slotDuration: '00:30',
-    locale: 'srb',
+    locale: 'en-GB',
     height: 550,
     firstDay: 1,
     slotLabelFormat: {

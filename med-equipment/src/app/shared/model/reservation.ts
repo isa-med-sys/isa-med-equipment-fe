@@ -3,4 +3,7 @@ export interface Reservation {
     companyId: number;
     equipmentIds: number[];
     timeSlotId: number;
+    isPickedUp?: boolean;
+    isCancelled?: boolean;
+    qrCode?: string;
 }
