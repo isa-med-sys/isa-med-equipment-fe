@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import { AdministrationService } from '../administration.service';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { Calendar } from 'src/app/shared/model/calendar';
+import {TimeSlot} from "../../../shared/model/timeslot";
+import {co} from "@fullcalendar/core/internal-common";
 
 @Component({
   selector: 'app-calendar',
@@ -114,13 +116,13 @@ export class CalendarComponent {
       });
     }
   }
-  
+
   // handleDateSelect(selectInfo: DateSelectArg) {
   //   const title = prompt('Please enter a new title for your event');
   //   const calendarApi = selectInfo.view.calendar;
-    
+
   //   calendarApi.unselect(); // clear date selection
-    
+
   //   if (title) { //dodaj na bek
   //     calendarApi.addEvent({
   //       id: this.createEventId(),
@@ -147,4 +149,24 @@ export class CalendarComponent {
   //   this.currentEvents = events;
   //   this.changeDetector.detectChanges();
   // }
+
+  createTimeSlot() {
+    let datetime = new Date()
+    let ts: TimeSlot = {
+      id: 0,
+      admin: this.admin,
+      companyAdminId: this.adminId,
+      start: [datetime.getFullYear(), datetime.getMonth() + 1, datetime.getDate(), datetime.getHours() + 1, datetime.getMinutes()],
+      duration: 30,
+      isFree: true,
+    }
+
+    console.log(ts);
+    console.log(ts.admin);
+
+    this.administrationService.addTimeSlot(ts).subscribe(result => {
+      ts = result;
+      console.log(ts);
+    });
+  }
 }
