@@ -45,7 +45,13 @@ li.equipment-item {
 p.rating {
   font-size: 18px;
   font-weight: bold;
-  color: #FFD700;
+  color: #2f4355;
+}
+
+p.work-hours {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2f4355;
 }
 
 .action-button {
@@ -56,7 +62,6 @@ p.rating {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px;
   cursor: pointer;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -116,10 +121,19 @@ li.reservation-item {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px;
   cursor: pointer;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   height: 30px;
   width: 200px;
+}
+
+.calendar-hint {
+  margin-top: 5px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px;
+  border: 1px solid #2c3e50;
+  border-radius: 5px;
+  margin-bottom: 15px;
 }

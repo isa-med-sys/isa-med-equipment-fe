@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Company } from "../../../shared/model/company";
 import { CompanyService } from "../company.service";
 import { ActivatedRoute } from "@angular/router";
 import { Equipment } from "../../../shared/model/equipment";
-import { TimeSlot } from 'src/app/shared/model/timeslot'; 
+import { TimeSlot } from 'src/app/shared/model/timeslot';
 import { AuthService } from 'src/app/authentication/auth.service';
 import { Reservation } from 'src/app/shared/model/reservation';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { CalendarOptions, DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
+import { User } from 'src/app/authentication/model/user.model';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { CustomTimeSlot } from 'src/app/shared/model/custom-time-slot';
+import { createDuration } from '@fullcalendar/core/internal';
 
 @Component({
   selector: 'app-company-profile',
@@ -17,6 +21,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   styleUrls: ['./company-profile.component.scss']
 })
 export class CompanyProfileComponent implements OnInit {
+  user!: User;
   companyId!: number;
   company!: Company;
   equipment: Equipment[] = [];
@@ -25,24 +30,64 @@ export class CompanyProfileComponent implements OnInit {
   selectedTimeSlotId: string | null = null;
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin],
+    plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin,],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
     initialView: 'timeGridWeek',
+    slotMinTime: '00:00',
+    slotMaxTime: '24:00', 
+    selectable: true, 
+    editable: false, 
+    weekends: true, 
+    nowIndicator: true,
+    selectMirror: true,
+    dayMaxEvents: false,
+    selectOverlap: false,
+    allDaySlot: false,
+    slotDuration: '00:30',
+    locale: 'srb',
+    height: 550,
+    firstDay: 1,
+    slotLabelFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    },
+    dayHeaderFormat: {
+      weekday: 'short',
+      month: 'numeric',
+      day: 'numeric',
+      omitCommas: true,
+    },
+    slotLabelInterval: { hours: 1 },
     events: [],
-    slotDuration: '00:30:00',
-    eventClick: this.handleEventClick.bind(this), 
+    eventColor: '#2ECBE9',
+    select: this.handleDateSelect.bind(this),
+    eventClick: this.handleEventClick.bind(this),
+    eventsSet: this.handleEvents.bind(this),
   };
+
+  currentEvents: EventApi[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private companyService: CompanyService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private changeDetector: ChangeDetectorRef
+  ) {
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.companyId = +params['id'];
-      this.initializeData(); 
+      this.initializeData();
     });
   }
 
@@ -56,12 +101,28 @@ export class CompanyProfileComponent implements OnInit {
     this.companyService.getCompanyById(this.companyId).subscribe({
       next: (company) => {
         this.company = company;
+        this.updateCalendarOptions();
       }
     });
   }
 
+  updateCalendarOptions() {
+    if (this.company.workStartTime !== undefined && this.company.workEndTime !== undefined) {
+      this.calendarOptions.weekends = this.company.worksOnWeekends;
+
+      const startHour = +this.company.workStartTime[0];
+      const startMinute = +this.company.workStartTime[1];
+      this.calendarOptions.slotMinTime = createDuration({ hours: startHour, minutes: startMinute });
+
+
+      const endHour = +this.company.workEndTime[0];
+      const endMinute = +this.company.workEndTime[1];
+      this.calendarOptions.slotMaxTime = createDuration({ hours: endHour, minutes: endMinute });
+    }
+  }
+
   loadEquipment() {
-    this.companyService.getEquipment(this.companyId).subscribe({
+    this.companyService.getAvailableEquipmentByCompany(this.companyId).subscribe({
       next: (result) => {
         this.equipment = result;
       }
@@ -71,9 +132,13 @@ export class CompanyProfileComponent implements OnInit {
   loadTimeSlots() {
     this.companyService.getAvailableTimeSlots(this.companyId).subscribe(
       (timeSlots: TimeSlot[]) => {
-        this.timeSlots = timeSlots;
-        const events = this.timeSlots.map(slot => this.mapTimeSlotToEvent(slot));
-        this.calendarOptions.events = events;
+        if (timeSlots.length > 0) {
+          this.timeSlots = timeSlots;
+          const events = this.timeSlots.map(slot => this.mapTimeSlotToEvent(slot));
+          this.calendarOptions.events = events;
+        } else {
+          this.calendarOptions.events = [{ title: 'No available time slots', start: new Date() }];
+        }
       },
       (err) => {
         console.error('Error fetching time slots:', err);
@@ -84,15 +149,18 @@ export class CompanyProfileComponent implements OnInit {
   mapTimeSlotToEvent(slot: TimeSlot): any {
     const startDate = new Date(slot.start[0], slot.start[1] - 1, slot.start[2], slot.start[3], slot.start[4]);
     const endDate = new Date(startDate.getTime() + slot.duration * 1000);
-  
+    const isSelected = String(slot.id) == this.selectedTimeSlotId;
+    const backgroundColor = isSelected ? '#2ECBE9' : '#a5a5a5';
     return {
-      id: String(slot.id), 
-      title: slot.isFree ? 'Available' : 'Reserved',
+      id: String(slot.id),
+      title: isSelected ? 'Your Pick' : 'Available',
+      backgroundColor: backgroundColor,
+      borderColor: backgroundColor,
       start: startDate,
       end: endDate,
     };
   }
-  
+
   addToReservation(equipment: Equipment) {
     if (!this.reservations.includes(equipment))
       this.reservations.push(equipment);
@@ -105,26 +173,22 @@ export class CompanyProfileComponent implements OnInit {
     }
   }
 
-  handleEventClick(info: EventClickArg) {
-    this.selectedTimeSlotId = info.event.id;
-  }
-
   finalizeReservation() {
     if (this.reservations.length > 0 && this.selectedTimeSlotId) {
       const reservation: Reservation = {
-        userId: this.authService.user$.value.id,
+        userId: this.user.id,
         companyId: this.companyId,
         equipmentIds: this.reservations.map(equipment => equipment.id),
-        timeSlotId: +this.selectedTimeSlotId, 
+        timeSlotId: +this.selectedTimeSlotId,
       };
 
       this.companyService.makeReservation(reservation).subscribe(
-        (result) => {
+        () => {
           this.openSnackBar('Reservation successful. Check your email for reservation details.', 'Close');
           this.clearAndReloadData();
         },
-        (error) => {
-          this.openSnackBar('Reservation failed.', 'Close');
+        (e) => {
+          this.openSnackBar(`Reservation failed.\n${e.error}`, 'Close');
         }
       );
     } else {
@@ -138,12 +202,64 @@ export class CompanyProfileComponent implements OnInit {
     this.initializeData();
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 30000
+  handleEventClick(info: EventClickArg) {
+    this.selectedTimeSlotId = info.event.id;
+    this.calendarOptions.events = this.timeSlots.map(slot => this.mapTimeSlotToEvent(slot));
+  }
+
+  handleDateSelect(selectInfo: DateSelectArg) {
+    this.selectedTimeSlotId = null;
+    this.calendarOptions.events = this.timeSlots.map(slot => this.mapTimeSlotToEvent(slot));
+    const calendarApi = selectInfo.view.calendar;
+
+    calendarApi.unselect();
+
+    const confirmation = confirm('Do you want to confirm your reservation?');
+    if (!confirmation) {
+      calendarApi.unselect();
+      return;
+    }
+
+    const selectedDate = new Date(selectInfo.start.getTime() - selectInfo.start.getTimezoneOffset() * 60000);
+    const timeSlot: CustomTimeSlot = {
+      start: selectedDate,
+    };
+
+    this.companyService.createTimeSlot(this.companyId, timeSlot).subscribe({
+      next: (result) => {
+        this.selectedTimeSlotId = result.id.toString();
+        this.finalizeReservation();
+      },
+      error: (e) => {
+        this.openSnackBar(`Try picking another time slot!\n${e.error}`, 'Close');
+      }
     });
   }
 
+  handleEvents(events: EventApi[]) {
+    this.currentEvents = events;
+    this.changeDetector.detectChanges();
+  }
+
+  openSnackBar(message: string, action: string, verticalPosition: MatSnackBarVerticalPosition = 'bottom') {
+    this.snackBar.open(message, action, {
+      duration: 30000,
+      verticalPosition: verticalPosition,
+    });
+  }
+
+  formatTime(timeArray: number[] | undefined): string {
+    if (timeArray && timeArray.length === 2) {
+      const [hour, minute] = timeArray;
+
+      const formattedHour = hour < 10 ? `0${hour}` : `${hour}`;
+      const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
+
+      return `${formattedHour}:${formattedMinute}`;
+    }
+    return 'N/A';
+  }
+  
   isReservationValid(): boolean {
     return this.reservations.length > 0 && !!this.selectedTimeSlotId;
   }
