@@ -9,4 +9,5 @@ export interface Equipment {
   rating: number;
   type: EquipmentType;
   companies: Company[];
+  quantity: number;
 }

@@ -1,3 +1,35 @@
 <div>
     <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
+
+<div class="add-timeslot">
+  <button mat-raised-button (click)="addTimeSlot()">Add Timeslot</button>
+  <div class="form-timeslot" *ngIf="showForm">
+    <form [formGroup]="timeslotGroup" (ngSubmit)="createTimeSlot()">
+      <div class="form-fields">
+
+        <mat-form-field>
+          <mat-label>Date:</mat-label>
+          <input matInput formControlName="date" type="date"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Time:</mat-label>
+          <input matInput formControlName="time" type="time"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Select Admin:</mat-label>
+          <mat-select formControlName="selectedAdmin">
+            <mat-option *ngFor="let admin of adminsList" [value]="admin">{{ admin.name }} {{ admin.surname }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <p class="error-message" *ngIf="showErr">{{ errMessage }}</p>
+
+      <button type="submit" mat-raised-button color="primary">Create Time Slot</button>
+      <button mat-raised-button color="primary" (click)="discardChanges()">Discard</button>
+    </form>
+  </div>
+</div>

@@ -10,4 +10,7 @@ export interface Company {
   address: Address;
   equipment: Equipment[];
   admins: CompanyAdmin[];
+  workStartTime?: number[];
+  workEndTime?: number[];
+  worksOnWeekends?: boolean;
 }
