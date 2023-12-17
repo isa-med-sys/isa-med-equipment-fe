@@ -2,23 +2,49 @@
   <div class="company-info">
     <h1>{{ company.name }}</h1>
     <div class="address-info">
-      <p>{{ company.address.street }} {{ company.address.streetNumber }}, {{ company.address.city }}, {{ company.address.country }}</p>
+      <p>{{ company.address.street }} {{ company.address.streetNumber }}, {{ company.address.city }}, {{
+        company.address.country }}</p>
     </div>
-    <p class="description">{{ company.description }}</p>
+    <p class="work-hours">
+      Work Hours: {{ formatTime(this.company.workStartTime) }} - {{ formatTime(this.company.workEndTime) }}
+      ({{ this.company.worksOnWeekends ? 'Everyday' : 'Mon-Fri' }})
+    </p>
     <p class="rating">Rating: {{ company.rating }}</p>
+    <p class="description">{{ company.description }}</p>
   </div>
 
-  <!-- Add map component here if needed -->
-  <!-- <div class="map-container">
-    Your map component goes here
-  </div> -->
-
-  <div>
-    <h2>Equipment List</h2>
-    <ul class="equipment-list">
-      <li *ngFor="let e of equipment" class="equipment-item">
-        {{ e.name }}
+  <div class="equipment-container">
+    <h2>Available Equipment</h2>
+    <table class="equipment-table">
+      <tbody>
+        <tr *ngFor="let e of equipment" class="equipment-item">
+          <td>{{ e.name }}</td>
+          <td *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'">
+            <button (click)="addToReservation(e)" class="action-button add" title="Reserve equipment">Reserve</button>
+          </td>
+          <td *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'">
+            <button *ngIf="isEquipmentInReservations(e)" (click)="removeFromReservation(e)" class="action-button remove"
+              title="Remove from reservation">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER' && reservations && reservations.length > 0"
+    class="reservation-section">
+    <h2>Reservation List</h2>
+    <ul class="reservation-list">
+      <li *ngFor="let r of reservations" class="reservation-item">
+        {{ r.name }}
       </li>
     </ul>
+    <button (click)="finalizeReservation()" class="finalize-reservation-button" title="Reserve Equipment">Reserve
+      Equipment</button>
+  </div>
+  <div *ngIf="reservations && reservations.length > 0" class="calendar-container">
+      <div class="calendar-hint">
+        <p>If none of the predefined time slots suit you, feel free to choose a custom time slot on the calendar!</p>
+      </div>
+    <full-calendar [options]="calendarOptions" class="calendar"></full-calendar>
   </div>
 </div>

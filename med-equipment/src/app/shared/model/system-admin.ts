@@ -1,6 +1,4 @@
-import { Company } from "./company";
-
-export interface CompanyAdmin {
+export interface SystemAdmin {
   id: number;
   name: string;
   surname: string;
@@ -8,6 +6,4 @@ export interface CompanyAdmin {
   currentPassword: string;
   newPassword: string;
   phoneNumber: string;
-  company: Company;
-  companyId: number;
 }

@@ -1,8 +1,9 @@
+import { Time } from "@angular/common";
 import { Address } from "./address";
 import { CompanyAdmin } from "./company-admin";
 import { Equipment } from "./equipment";
 
-export interface Company {
+export interface CompanyCalendar {
   id: number;
   name: string;
   description: string;
@@ -10,7 +11,8 @@ export interface Company {
   address: Address;
   equipment: Equipment[];
   admins: CompanyAdmin[];
-  workStartTime?: number[];
-  workEndTime?: number[];
-  worksOnWeekends?: boolean;
+
+  workStartTime: Time;
+  workEndTime: Time;
+  worksOnWeekends: boolean;
 }

@@ -67,4 +67,8 @@ export class AuthService {
       this.user$.next({ email: '', id: 0, role: '' });
     });
   }
+
+  getPasswordChanged(id: number): Observable<Boolean> {
+    return this.http.get<Boolean>(environment.apiHost + 'users/password-change/' + id);
+  }
 }

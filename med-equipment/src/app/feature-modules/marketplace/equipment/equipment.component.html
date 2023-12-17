@@ -1,51 +1,78 @@
-<div>
-    <p>Equipment</p>
-    <hr>
-    <div>
-        <div>
-            <input type="range" id="ratingSlider" min="1" max="5" step="0.1" value="1" (input)="updateSliderValue($event)"><p>{{this.rating}}+</p>
-            <mat-form-field>
-                <mat-label>Name</mat-label>
-                <input [(ngModel)]="name" matInput type="text"/>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Select Type</mat-label>
-                <mat-select [(ngModel)]="type">
-                    <mat-option value="ALL">All Types</mat-option>
-                  <mat-option value="TYPE1">Type 1</mat-option>
-                  <mat-option value="TYPE2">Type 2</mat-option>
-                  <mat-option value="TYPE3">Type 3</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <button mat-raised-button color="accent" (click)="search()">Search</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Type</th>
-                        <th>Rating</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let eq of equipment">
-                        <td>{{eq.name}}</td>
-                        <td>{{eq.description}}</td>
-                        <td>{{eq.type}}</td>
-                        <td>{{eq.rating}}</td>
-                        <td>
-                            <button color="accent" (click)="onShowCompanies(eq.id)" mat-raised-button color="accent">Show Companies</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div *ngIf="isShowingCompanies">
-                <p>Companies with this equipment</p>
-                <div *ngFor="let company of companies">
-                    <li>{{ company.name }} {{ company.description }}</li>   
-                </div>          
+<div class="mat-elevation-z8">
+    <mat-expansion-panel class="search-header" [expanded]="showFilter">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Search</mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="searchForm" (ngSubmit)="searchEquipment()">
+            <div class="filter-form-row">
+                <label for="name">Name:</label>
+                <input type="text" id="name" formControlName="name">
             </div>
-        </div>
-    </div>
+            <div class="filter-form-row">
+                <label for="type">Type:</label>
+                <select id="type" formControlName="type">
+                    <option value="">All Types</option>
+                    <option value="TYPE1">Type 1</option>
+                    <option value="TYPE2">Type 2</option>
+                    <option value="TYPE3">Type 3</option>
+                </select>
+            </div>
+            <div class="filter-form-row">
+                <label for="rating">Rating:</label>
+                <input type="number" id="rating" formControlName="rating" min="0" max="5">
+            </div>
+            <button type="submit">Search</button>
+            <button type="button" (click)="clearAll()">Clear All</button>
+        </form>
+    </mat-expansion-panel>
+
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let equipment" (click)="onRowClick(equipment)">{{ equipment.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+            <td mat-cell *matCellDef="let equipment" (click)="onRowClick(equipment)">{{ equipment.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+            <td mat-cell *matCellDef="let equipment" (click)="onRowClick(equipment)">{{ equipment.type }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+            <td mat-cell *matCellDef="let equipment" (click)="onRowClick(equipment)">{{ equipment.rating }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalEquipment" showFirstLastButtons
+        (page)="onPageChange($event)"></mat-paginator>
+    
+    <table *ngIf="showList" mat-table [dataSource]="companies">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let c" (click)="onCompanyClick(c)">{{ c.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="loc">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+            <td mat-cell *matCellDef="let c" (click)="onCompanyClick(c)">{{ c.address.city }}, {{ c.address.country }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+            <td mat-cell *matCellDef="let c" (click)="onCompanyClick(c)">{{ c.rating }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['name', 'loc', 'rating']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'loc', 'rating'];"></tr>
+    </table>
 </div>
