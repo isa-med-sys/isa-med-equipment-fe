@@ -9,7 +9,7 @@ import { environment } from 'src/env/environment';
 import { Equipment } from "../../shared/model/equipment";
 import { Calendar } from 'src/app/shared/model/calendar';
 import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
-import {TimeSlot} from "../../shared/model/timeslot";
+import { TimeSlot } from "../../shared/model/timeslot";
 
 @Injectable({
   providedIn: 'root'
@@ -93,9 +93,18 @@ export class AdministrationService {
   getReservationByTimeSlotId(id: number): Observable<RegisteredUser> {
     return this.http.get<RegisteredUser>(environment.apiHost + `reservations/timeslot/${id}`);
   }
-  
+
   addTimeSlot(companyId: number, timeSlot: TimeSlot): Observable<TimeSlot> {
     const params = new HttpParams().set('companyId', companyId.toString());
     return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot, { params });
+  }
+
+  canUpdateEquipment(id: number, equipment: Equipment): Observable<boolean> {
+    return this.http.put<boolean>(environment.apiHost + `reservations/equipment-update/${id}`, equipment);
+  }
+
+  canDeleteEquipment(id: number, equipment: Equipment): Observable<boolean> {
+    const params = new HttpParams().set('equipmentId', equipment.id.toString());
+    return this.http.get<boolean>(environment.apiHost + `reservations/equipment-delete/${id}`, { params });
   }
 }
