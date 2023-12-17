@@ -6,6 +6,7 @@ import { AdministrationService } from '../administration.service';
 import { MatTableDataSource } from "@angular/material/table";
 import { Equipment } from "../../../shared/model/equipment";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import {co} from "@fullcalendar/core/internal-common";
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -245,15 +246,25 @@ export class CompanyAdminProfileComponent {
 
     const index = this.equipment.indexOf(eq);
 
-    // PROVERITI DA LI JE OPREMA REZERVISANA A NE PREUZETA
-
     if (index !== -1) {
-      this.equipment.splice(index, 1);
-      this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
 
-        this.loadEquipment();
-        console.log("Deleted: " + eq.name);
-      });
+      if (this.equipment.at(index)) {
+        this.administrationService.canDeleteEquipment(this.admin.company.id, this.equipment.at(index)!).subscribe(result => {
+
+          if (result) {
+            this.equipment.splice(index, 1);
+            this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
+
+              this.loadEquipment();
+              console.log("Deleted: " + eq.name);
+            });
+          } else {
+            console.log("Equipment can't be deleted!");
+          }
+        });
+      } else {
+        console.error('Equipment at index is undefined.');
+      }
     } else {
       console.log("Element not found in the list.");
     }
@@ -276,6 +287,7 @@ export class CompanyAdminProfileComponent {
 
       this.administrationService.addEquipment(e).subscribe(result => {
         e = result;
+        e.quantity = this.equipmentForm.get('quantity')?.value;
         this.equipment.push(e);
         console.log(this.equipment);
 
@@ -310,14 +322,24 @@ export class CompanyAdminProfileComponent {
 
         console.log(this.equipment);
 
-        this.administrationService.updateEquipment(this.equipment[index].id, this.equipment[index]).subscribe(result => {
+        // update provera
+        this.administrationService.canUpdateEquipment(this.admin.company.id, this.equipment[index]).subscribe(result => {
+          if (result) {
+            this.administrationService.updateEquipment(this.equipment[index].id, this.equipment[index]).subscribe(result => {
 
-          console.log(result);
+              console.log(result);
 
-          this.loadEquipment();
-          console.log(this.equipment);
-          console.log("Equipment updated.");
-          this.showEditForm = false;
+              this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
+
+                this.loadEquipment();
+                console.log(this.equipment);
+                console.log("Equipment updated.");
+                this.showEditForm = false;
+              });
+            });
+          } else {
+            console.log("Equipment can't be updated!");
+          }
         });
       }
     }
