@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AdministrationService } from '../../administration/administration.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-equipment',
@@ -34,7 +35,7 @@ export class EquipmentComponent implements AfterViewInit {
   userRole?: string;
   companyId?: number;
 
-  constructor(private service: MarketplaceService, authService: AuthService, private administrationService: AdministrationService, private formBuilder: FormBuilder) {
+  constructor(private service: MarketplaceService, private router: Router, authService: AuthService, private administrationService: AdministrationService, private formBuilder: FormBuilder) {
     this.userId = authService.user$.value.id;
     this.userRole = authService.user$.value.role;
 
@@ -93,6 +94,9 @@ export class EquipmentComponent implements AfterViewInit {
     this.size = event.pageSize;
     this.page = event.pageIndex;
     this.loadEquipment();
+  }
+  onCompanyClick(c: Company): void {
+    this.router.navigate(['company', c.id]);
   }
 
   onRowClick(equipment: Equipment): void {

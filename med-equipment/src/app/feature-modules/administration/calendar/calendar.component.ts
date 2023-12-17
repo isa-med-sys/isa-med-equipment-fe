@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import { AdministrationService } from '../administration.service';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { Calendar } from 'src/app/shared/model/calendar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {TimeSlot} from "../../../shared/model/timeslot";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
@@ -33,7 +34,7 @@ export class CalendarComponent {
     initialView: 'timeGridWeek',
     slotMinTime: '00:00', // vidljivosti
     slotMaxTime: '24:00', // vidljivosti
-    selectable: false, // da ne klikce
+    selectable: false, // da klikce
     editable: false, // da ne pomera
     weekends: true, // vikendi prikaz
     nowIndicator: true,
@@ -62,6 +63,7 @@ export class CalendarComponent {
     eventTextColor: '#000000',
     eventBorderColor: '#777777',
     eventBackgroundColor: '#E0E0E0',
+    eventClick: this.handleEventClick.bind(this),
     // businessHours: {
     //   startTime: '09:00',
     //   endTime: '17:00',
@@ -75,8 +77,10 @@ export class CalendarComponent {
     // eventRemove: this.removeToBase(this),
   };
   currentEvents: EventApi[] = [];
+  stt: string | undefined = '';
+  dur: number = 0;
 
-  constructor(private changeDetector: ChangeDetectorRef, authService: AuthService, private administrationService: AdministrationService, private fb: FormBuilder) {
+  constructor(private changeDetector: ChangeDetectorRef, authService: AuthService, private administrationService: AdministrationService, private snackBar: MatSnackBar, private fb: FormBuilder) {
     this.adminId = authService.user$.value.id;
 
     this.timeslotGroup = this.fb.group({
@@ -108,6 +112,7 @@ export class CalendarComponent {
                 const eventColor1 = slot.isFree ? 'hsl(120, 100%, 85%)' : 'hsl(0, 100%, 85%)';
                 const eventColor2 = slot.isFree ? '#00ff00' : '#ff0000';
                 return {
+                  id: String(slot.id),
                   title: slot.admin.name,
                   start: startDateTime,
                   end: endDateTime,
@@ -127,6 +132,26 @@ export class CalendarComponent {
     }
   }
 
+  handleEventClick(info: EventClickArg) {
+    let selectedTimeSlot = this.calendarData.timeSlots.find(slot => slot.id.toString() == info.event.id);
+    if (selectedTimeSlot && !selectedTimeSlot.isFree) {
+      console.log(selectedTimeSlot);
+      this.stt = info.event.start ? new Date(info.event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+      this.dur = selectedTimeSlot.duration/60;
+      this.administrationService.getReservationByTimeSlotId(selectedTimeSlot.id).subscribe({
+        next: (result) => {
+          let message = 'Starting Time: '+ this.stt +', Duration: ' + this.dur + ', Customer: '+ result.name + ' ' + result.surname;
+          this.snackBar.open(message, 'Close', {
+            duration: 30000,
+          });
+        }
+      });
+    } else {
+      console.log(`Time slot with id ${info.event.id} not found.`);
+      //dts
+    }
+  }
+  
   // handleDateSelect(selectInfo: DateSelectArg) {
   //   const title = prompt('Please enter a new title for your event');
   //   const calendarApi = selectInfo.view.calendar;
@@ -142,22 +167,6 @@ export class CalendarComponent {
   //       allDay: selectInfo.allDay
   //     });
   //   }
-  // }
-
-  // createEventId() {
-  //   return String(this.eventGuid++);
-  // }
-
-
-  // handleEventClick(clickInfo: EventClickArg) {
-  //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-  //     clickInfo.event.remove();
-  //   }
-  // }
-
-  // handleEvents(events: EventApi[]) {
-  //   this.currentEvents = events;
-  //   this.changeDetector.detectChanges();
   // }
 
   timeslotGroup: FormGroup;

@@ -8,6 +8,7 @@ import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
 import { Equipment } from "../../shared/model/equipment";
 import { Calendar } from 'src/app/shared/model/calendar';
+import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 import {TimeSlot} from "../../shared/model/timeslot";
 
 @Injectable({
@@ -21,8 +22,8 @@ export class AdministrationService {
     return this.http.get<Company[]>(environment.apiHost + 'companies/temp'); //temp a mozda i ne
   }
 
-  addCompany(company: Company): Observable<Company> {
-    return this.http.post<Company>(environment.apiHost + 'companies', company);
+  addCompany(companyCalendar: CompanyCalendar): Observable<Company> {
+    return this.http.post<Company>(environment.apiHost + 'companies', companyCalendar);
   }
 
   addAdmin(admin:CompanyAdmin): Observable<CompanyAdmin> {
@@ -89,6 +90,10 @@ export class AdministrationService {
     return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
   }
 
+  getReservationByTimeSlotId(id: number): Observable<RegisteredUser> {
+    return this.http.get<RegisteredUser>(environment.apiHost + `reservations/timeslot/${id}`);
+  }
+  
   addTimeSlot(companyId: number, timeSlot: TimeSlot): Observable<TimeSlot> {
     const params = new HttpParams().set('companyId', companyId.toString());
     return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot, { params });
