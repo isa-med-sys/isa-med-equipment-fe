@@ -13,65 +13,62 @@ import { SystemAdmin } from 'src/app/shared/model/system-admin';
 export class SystemAdminProfileComponent {
 
   companies!: Company[];
-  isCompanyFormVisible: boolean = false;
   isAdminFormVisible: boolean = false;
-  isSysAdminFormVisible: boolean = false;
-  errorMessage: string = '';
   companyForm!: FormGroup;
   adminForm!: FormGroup;
   sysAdminForm!: FormGroup;
   selectedCompanyId: number = 0;
+  selectedCompanyName: string = '';
 
   constructor(private administrationService: AdministrationService, private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.initializeAdminForm();
+    this.initializeCompanyForm();
+    this.initializeSysAdminForm();
     this.getData();
   }
 
-  addNewCompany(): void {
-    this.isCompanyFormVisible = true;
-    this.isAdminFormVisible = false;
-    this.isSysAdminFormVisible = false;
-  }
-
-  addNewAdmin(company: number): void {
-    this.isCompanyFormVisible = false;
+  addNewAdmin(companyId: number): void {
     this.isAdminFormVisible = true;
-    this.isSysAdminFormVisible = false;
-    this.selectedCompanyId = company;
+    this.selectedCompanyId = companyId;
+
+    const selectedCompany = this.companies.find(company => company.id == companyId);
+    this.selectedCompanyName = selectedCompany ? selectedCompany.name : '';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   addNewSysAdmin(): void {
-    this.isCompanyFormVisible = false;
     this.isAdminFormVisible = false;
-    this.isSysAdminFormVisible = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   cancelCompanyCreation(): void {
-    this.isCompanyFormVisible = false;
     this.initializeCompanyForm();
   }
 
   cancelAdminCreation(): void {
-    this.isAdminFormVisible = false;
     this.initializeAdminForm();
   }
 
   cancelSysAdminCreation(): void {
-    this.isSysAdminFormVisible = false;
     this.initializeSysAdminForm();
   }
 
   initializeCompanyForm() {
     this.companyForm = this.fb.group({
-      name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
       address: this.fb.group({
-        street: ['', [Validators.required]],
-        streetNumber: ['', [Validators.required]],
-        country: ['', [Validators.required]],
-        city: ['', [Validators.required]],
+        street: ['', Validators.required],
+        streetNumber: ['', Validators.required],
+        country: ['', Validators.required],
+        city: ['', Validators.required],
       }),
+      workStartTime: ['', Validators.required],
+      workEndTime: ['', Validators.required],
+      //worksOnWeekends: ['', Validators.required],
     });
   }
 
@@ -97,12 +94,12 @@ export class SystemAdminProfileComponent {
   }
 
   saveCompany(): void {
+    console.log(this.companyForm);
     if (this.companyForm.valid) {
       this.administrationService.addCompany(this.companyForm.value).subscribe({
         next: (newCompany) => {
           console.log('Company created successfully.');
           this.getData();
-          this.isCompanyFormVisible = false;
         },
         error: (err) => {
           console.log(err);
@@ -119,7 +116,6 @@ export class SystemAdminProfileComponent {
         next: (newAdmin) => {
           console.log('Admin created successfully.');
           this.getData();
-          this.isAdminFormVisible = false;
         },
         error: (err) => {
           console.log(err);
@@ -129,14 +125,12 @@ export class SystemAdminProfileComponent {
   }
 
   saveSysAdmin(): void {
-    console.log('rerrrna');
     if (this.sysAdminForm.valid) {
       let administrator: SystemAdmin = this.sysAdminForm.value;
       this.administrationService.addSysAdmin(administrator).subscribe({
         next: (newAdmin) => {
           console.log('SysAdmin created successfully.');
-          // this.getData(); mozda sys admin tabla
-          this.isSysAdminFormVisible = false;
+          // sys t r
         },
         error: (err) => {
           console.log(err);
@@ -146,10 +140,9 @@ export class SystemAdminProfileComponent {
   }
 
   getData(): void {
-    this.administrationService.getCompanies().subscribe({ //pgr izgl
+    this.administrationService.getCompanies().subscribe({ //pgr
       next: (companies) => {
         this.companies = companies;
-  
         for (let i = 0; i < this.companies.length; i++) {
           this.administrationService.getAdminsByCompanyId(this.companies[i].id)
             .subscribe({
@@ -161,9 +154,8 @@ export class SystemAdminProfileComponent {
               },
             });
         }
-  
-        this.initializeCompanyForm();
         this.initializeAdminForm();
+        this.initializeCompanyForm();
         this.initializeSysAdminForm();
       },
       error: (err) => {

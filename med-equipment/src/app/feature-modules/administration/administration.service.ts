@@ -7,6 +7,7 @@ import { SystemAdmin } from 'src/app/shared/model/system-admin';
 import { RegisteredUser } from 'src/app/shared/model/registered-user';
 import { environment } from 'src/env/environment';
 import { Calendar } from 'src/app/shared/model/calendar';
+import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class AdministrationService {
     return this.http.get<Company[]>(environment.apiHost + 'companies/temp'); //temp a mozda i ne
   }
 
-  addCompany(company: Company): Observable<Company> {
-    return this.http.post<Company>(environment.apiHost + 'companies', company);
+  addCompany(companyCalendar: CompanyCalendar): Observable<Company> {
+    return this.http.post<Company>(environment.apiHost + 'companies', companyCalendar);
   }
 
   addAdmin(admin:CompanyAdmin): Observable<CompanyAdmin> {
@@ -65,5 +66,9 @@ export class AdministrationService {
 
   getCalendar(id: number): Observable<Calendar> {
     return this.http.get<Calendar>(environment.apiHost + `calendars`+ `?companyId=${id}`);
+  }
+
+  getReservationByTimeSlotId(id: number): Observable<RegisteredUser> {
+    return this.http.get<RegisteredUser>(environment.apiHost + `reservations/timeslot/${id}`);
   }
 }

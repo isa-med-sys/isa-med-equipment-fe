@@ -2,21 +2,39 @@ h2 {
     color: #333;
 }
 
+.forms {
+    display: flex;
+}
+
+.form .col {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.form .col:last-child {
+    margin-right: 0;
+}
+
 .form {
+    display: flex;
     margin-top: 20px;
 
     mat-form-field {
         width: 100%;
         margin-bottom: 15px;
 
-        input {
-            background-color: #fff;
-        }
+        // input {
+        //     background-color: #fff;
+        // }
     }
 
     button {
         margin-top: 20px;
     }
+}
+
+.col1 {
+    margin: 40px;
 }
 
 .mat-elevation-z8 {

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/authentication/auth.service';
 import { AdministrationService } from '../administration.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
@@ -13,7 +14,8 @@ export class ChangePasswordComponent {
   constructor(
     private service: AdministrationService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   passwordForm = new FormGroup({
@@ -37,7 +39,9 @@ export class ChangePasswordComponent {
           });
         }
       }
-      else alert('Passwords do not match');
+      else this.snackBar.open('Passwords do not match.', 'Close', {
+        duration: 30000,
+      });
     }
   }
 }
