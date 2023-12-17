@@ -1,3 +1,4 @@
+import { Address } from "./address";
 import { Company } from "./company";
 
 export interface CompanyAdmin {

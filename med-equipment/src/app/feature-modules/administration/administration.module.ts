@@ -4,18 +4,12 @@ import { SystemAdminProfileComponent } from './system-admin-profile/system-admin
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
-import { RegisteredUserProfileComponent } from './registered-user-profile/registered-user-profile.component';
-import { CompanyAdminProfileComponent } from './company-admin-profile/company-admin-profile.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
 @NgModule({
   declarations: [
-    SystemAdminProfileComponent,
-    RegisteredUserProfileComponent,
-    ChangePasswordComponent,
-    CompanyAdminProfileComponent
+    SystemAdminProfileComponent
   ],
   imports: [
     CommonModule,
@@ -24,10 +18,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     HttpClientModule
   ],
   exports: [
-    SystemAdminProfileComponent,
-    RegisteredUserProfileComponent,
-    ChangePasswordComponent,
-    CompanyAdminProfileComponent
+    SystemAdminProfileComponent
   ]
 })
 export class AdministrationModule { }

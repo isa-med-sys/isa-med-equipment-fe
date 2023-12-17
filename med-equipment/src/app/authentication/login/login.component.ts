@@ -32,17 +32,6 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(login).subscribe({
         next: () => {
-          if(this.authService.user$.value.role == 'SYSTEM_ADMIN') { //brgl
-            this.authService.getPasswordChanged(this.authService.user$.value.id).subscribe({
-              next: (result) => {
-                if(!result)
-                  this.router.navigate(['change-password']);
-              },
-              error: (errorMessage) => {
-                this.errorMessage = errorMessage;
-              }
-            });
-          }
           this.router.navigate(['/']);
         },
         error: (errorMessage) => {

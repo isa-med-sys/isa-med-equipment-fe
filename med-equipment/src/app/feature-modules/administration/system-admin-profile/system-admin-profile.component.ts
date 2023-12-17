@@ -3,7 +3,6 @@ import { AdministrationService } from '../administration.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Company } from 'src/app/shared/model/company';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
-import { SystemAdmin } from 'src/app/shared/model/system-admin';
 
 @Component({
   selector: 'app-system-admin-profile',
@@ -15,11 +14,9 @@ export class SystemAdminProfileComponent {
   companies!: Company[];
   isCompanyFormVisible: boolean = false;
   isAdminFormVisible: boolean = false;
-  isSysAdminFormVisible: boolean = false;
   errorMessage: string = '';
   companyForm!: FormGroup;
   adminForm!: FormGroup;
-  sysAdminForm!: FormGroup;
   selectedCompanyId: number = 0;
 
   constructor(private administrationService: AdministrationService, private fb: FormBuilder) { }
@@ -31,20 +28,12 @@ export class SystemAdminProfileComponent {
   addNewCompany(): void {
     this.isCompanyFormVisible = true;
     this.isAdminFormVisible = false;
-    this.isSysAdminFormVisible = false;
   }
 
   addNewAdmin(company: number): void {
     this.isCompanyFormVisible = false;
     this.isAdminFormVisible = true;
-    this.isSysAdminFormVisible = false;
     this.selectedCompanyId = company;
-  }
-
-  addNewSysAdmin(): void {
-    this.isCompanyFormVisible = false;
-    this.isAdminFormVisible = false;
-    this.isSysAdminFormVisible = true;
   }
 
   cancelCompanyCreation(): void {
@@ -55,11 +44,6 @@ export class SystemAdminProfileComponent {
   cancelAdminCreation(): void {
     this.isAdminFormVisible = false;
     this.initializeAdminForm();
-  }
-
-  cancelSysAdminCreation(): void {
-    this.isSysAdminFormVisible = false;
-    this.initializeSysAdminForm();
   }
 
   initializeCompanyForm() {
@@ -83,16 +67,12 @@ export class SystemAdminProfileComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['admin'],
       companyId: [0],
-    });
-  }
-
-  initializeSysAdminForm() {
-    this.sysAdminForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['admin'],
+      // address: this.fb.group({
+      //   street: ['', [Validators.required]],
+      //   streetNumber: ['', [Validators.required]],
+      //   country: ['', [Validators.required]],
+      //   city: ['', [Validators.required]],
+      // }),
     });
   }
 
@@ -128,23 +108,6 @@ export class SystemAdminProfileComponent {
     }
   }
 
-  saveSysAdmin(): void {
-    console.log('rerrrna');
-    if (this.sysAdminForm.valid) {
-      let administrator: SystemAdmin = this.sysAdminForm.value;
-      this.administrationService.addSysAdmin(administrator).subscribe({
-        next: (newAdmin) => {
-          console.log('SysAdmin created successfully.');
-          // this.getData(); mozda sys admin tabla
-          this.isSysAdminFormVisible = false;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
-  }
-
   getData(): void {
     this.administrationService.getCompanies().subscribe({
       next: (companies) => {
@@ -164,7 +127,6 @@ export class SystemAdminProfileComponent {
   
         this.initializeCompanyForm();
         this.initializeAdminForm();
-        this.initializeSysAdminForm();
       },
       error: (err) => {
         console.error('Error fetching companies:', err);
