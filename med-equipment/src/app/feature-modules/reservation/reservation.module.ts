@@ -4,8 +4,6 @@ import { ReservationHistoryComponent } from './reservation-history/reservation-h
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 
-
-
 @NgModule({
   declarations: [
     ReservationHistoryComponent

@@ -17,6 +17,10 @@ export class ReservationService {
     return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations`, { params });
   }
 
+  cancelReservation(reservation: Reservation): Observable<Reservation> {
+    return this.http.post<Reservation>(environment.apiHost + `reservations/cancel-reservation`, reservation);
+  }
+
   private buildParams(userId: number, page: number, size: number): HttpParams {
     let params = new HttpParams()
       .set('page', page.toString())
