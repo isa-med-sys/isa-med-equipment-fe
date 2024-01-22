@@ -14,6 +14,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { CustomTimeSlot } from 'src/app/shared/model/custom-time-slot';
 import { createDuration } from '@fullcalendar/core/internal';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-company-profile',
@@ -28,6 +29,9 @@ export class CompanyProfileComponent implements OnInit {
   reservations: Equipment[] = [];
   timeSlots: TimeSlot[] = [];
   selectedTimeSlotId: string | null = null;
+  customTimeSlot?: {
+    start: Date
+  };
 
   calendarOptions: CalendarOptions = {
     plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin,],
@@ -80,7 +84,7 @@ export class CompanyProfileComponent implements OnInit {
     private changeDetector: ChangeDetectorRef
   ) {
     this.authService.user$.subscribe(user => {
-      this.user = user;
+      this.user = user;      
     });
   }
 
@@ -173,7 +177,29 @@ export class CompanyProfileComponent implements OnInit {
     }
   }
 
+
   finalizeReservation() {
+    if (this.selectedTimeSlotId == null && this.customTimeSlot) {
+      this.companyService.createTimeSlot(this.companyId, this.customTimeSlot)
+        .pipe(
+          finalize(() => {
+            this.finalizeReservationAfterTimeSlotCreation();
+          })
+        )
+        .subscribe({
+          next: (result) => {
+            this.selectedTimeSlotId = result.id.toString();
+          },
+          error: (e) => {
+            this.openSnackBar(`Try picking another time slot!\n${e.error}`, 'Close');
+          }
+        });
+    } else {
+      this.finalizeReservationAfterTimeSlotCreation();
+    }
+  }
+
+  private finalizeReservationAfterTimeSlotCreation() {
     if (this.reservations.length > 0 && this.selectedTimeSlotId) {
       const reservation: Reservation = {
         userId: this.user.id,
@@ -210,34 +236,16 @@ export class CompanyProfileComponent implements OnInit {
   handleDateSelect(selectInfo: DateSelectArg) {
     this.selectedTimeSlotId = null;
     this.calendarOptions.events = this.timeSlots.map(slot => this.mapTimeSlotToEvent(slot));
-    const calendarApi = selectInfo.view.calendar;
-
-    calendarApi.unselect();
-
-    const confirmation = confirm('Do you want to confirm your reservation?');
-    if (!confirmation) {
-      calendarApi.unselect();
-      return;
-    }
 
     const selectedDate = new Date(selectInfo.start.getTime() - selectInfo.start.getTimezoneOffset() * 60000);
-    const timeSlot: CustomTimeSlot = {
-      start: selectedDate,
+    this.customTimeSlot = {
+      start: selectedDate, 
     };
-
-    this.companyService.createTimeSlot(this.companyId, timeSlot).subscribe({
-      next: (result) => {
-        this.selectedTimeSlotId = result.id.toString();
-        this.finalizeReservation();
-      },
-      error: (e) => {
-        this.openSnackBar(`Try picking another time slot!\n${e.error}`, 'Close');
-      }
-    });
   }
 
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
+    
     this.changeDetector.detectChanges();
   }
 
