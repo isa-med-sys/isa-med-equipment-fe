@@ -10,4 +10,5 @@ export interface Equipment {
   type: EquipmentType;
   companies: Company[];
   quantity: number;
+  remove?: boolean;
 }
