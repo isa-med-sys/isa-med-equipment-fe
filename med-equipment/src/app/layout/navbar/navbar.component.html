@@ -4,6 +4,8 @@
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
             <button *ngIf="user && (user.role == 'REGISTERED_USER' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
                 [routerLink]="['companies']">Companies</button>
+            <button *ngIf="user && (user.role == 'COMPANY_ADMIN' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
+                [routerLink]="['equipment']">Equipment</button>
 
             <!-- Registered User -->
             <button *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'" mat-raised-button color="accent"
@@ -17,13 +19,10 @@
             <button *ngIf="user && user.role == 'COMPANY_ADMIN'" mat-raised-button color="accent"
                 [routerLink]="['company-admin/profile']">Profile</button>
 
-            <button *ngIf="user && (user.role == 'COMPANY_ADMIN' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
-                [routerLink]="['equipment']">Equipment</button>
-
             <!-- System Admin -->
             <button *ngIf="user && user.email !== '' && user.role == 'SYSTEM_ADMIN'" mat-raised-button color="accent"
-                [routerLink]="['admin/profile']">Admin Profile</button>
-
+                [routerLink]="['admin/profile']">Profile</button>
+                
             <button *ngIf="user && user.email === ''" mat-raised-button color="accent" [routerLink]="['login']">Login</button>
             <button *ngIf="user && user.email !== ''" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
         </div>
