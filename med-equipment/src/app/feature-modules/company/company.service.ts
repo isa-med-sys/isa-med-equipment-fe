@@ -16,8 +16,8 @@ export class CompanyService {
 
   constructor(private http: HttpClient) { }
 
-  getCompanies(name: string, city: string, rating: number, page: number, size: number): Observable<PagedResults<Company>> {
-    const params = this.buildParams(name, city, rating, page, size);
+  getCompanies(name: string, city: string, rating: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Company>> {
+    const params = this.buildParams(name, city, rating, page, size, sortBy, sortDirection);
     return this.http.get<PagedResults<Company>>(environment.apiHost + 'companies', { params });
   }
 
@@ -47,14 +47,15 @@ export class CompanyService {
     return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot, { params });
   }
 
-  private buildParams(name: string, city: string, rating: number, page: number, size: number): HttpParams {
+  private buildParams(name: string, city: string, rating: number, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
     let params = new HttpParams()
+      .set('name', name)
+      .set('city', city)
+      .set('rating', rating.toString())
       .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (name) params = params.set('name', name);
-    if (city) params = params.set('city', city);
-    if (rating) params = params.set('rating', rating.toString());
+      .set('size', size.toString())
+      .set('sort', sortBy)
+      .set('direction', sortDirection);
 
     return params;
   }

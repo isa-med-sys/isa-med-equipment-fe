@@ -12,6 +12,7 @@ import { MarketplaceModule } from './feature-modules/marketplace/marketplace.mod
 import { JwtInterceptor } from './authentication/jwt/jwt.interceptor';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ReservationModule } from './feature-modules/reservation/reservation.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ReservationModule } from './feature-modules/reservation/reservation.mod
       useClass: JwtInterceptor,
       multi: true,
     },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

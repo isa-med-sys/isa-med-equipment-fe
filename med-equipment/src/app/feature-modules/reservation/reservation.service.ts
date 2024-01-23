@@ -12,20 +12,27 @@ export class ReservationService {
 
   constructor(private http: HttpClient) { }
 
-  getReservationsByUser(userId: number, page: number, size: number): Observable<PagedResults<Reservation>> {
-    const params = this.buildParams(userId, page, size);
-    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations`, { params });
+  getPastReservationsByUser(userId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
+    const params = this.buildParams(userId, page, size, sortBy, sortDirection);
+    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/past`, { params });
+  }
+
+  getUpcomingReservationsByUser(userId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
+    const params = this.buildParams(userId, page, size, sortBy, sortDirection);
+    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/upcoming`, { params });
   }
 
   cancelReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(environment.apiHost + `reservations/cancel-reservation`, reservation);
+    return this.http.post<Reservation>(environment.apiHost + `reservations/cancel`, reservation);
   }
 
-  private buildParams(userId: number, page: number, size: number): HttpParams {
+  private buildParams(userId: number, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('userId', userId.toString());
+      .set('userId', userId.toString())
+      .set('sort', sortBy)
+      .set('direction', sortDirection);
     
     return params;
   }

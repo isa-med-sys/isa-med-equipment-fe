@@ -1,3 +1,5 @@
+import { Equipment } from "./equipment";
+
 export interface Reservation {
     userId: number;
     companyId: number;
@@ -6,4 +8,7 @@ export interface Reservation {
     isPickedUp?: boolean;
     isCancelled?: boolean;
     qrCode?: string;
+    price?: number;
+    companyName?: string;
+    start?: string;
 }

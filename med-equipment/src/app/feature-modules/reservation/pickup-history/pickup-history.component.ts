@@ -1,40 +1,37 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort, SortDirection } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app/authentication/auth.service';
 import { User } from 'src/app/authentication/model/user.model';
+import { ImagePopupComponent } from 'src/app/shared/image-popup/image-popup.component';
 import { Reservation } from 'src/app/shared/model/reservation';
 import { ReservationService } from '../reservation.service';
-import { AuthService } from 'src/app/authentication/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ImagePopupComponent } from 'src/app/shared/image-popup/image-popup.component';
-import { MatDialog } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
-import { MatSort, SortDirection } from '@angular/material/sort';
 
 @Component({
-  selector: 'app-reservation-history',
-  templateUrl: './reservation-history.component.html',
-  styleUrls: ['./reservation-history.component.scss']
+  selector: 'app-pickup-history',
+  templateUrl: './pickup-history.component.html',
+  styleUrls: ['./pickup-history.component.scss']
 })
-export class ReservationHistoryComponent implements AfterViewInit {
+export class PickupHistoryComponent implements AfterViewInit {
   user!: User;
 
-  displayedColumns: string[] = ['companyName', 'price', 'start', 'qrCode', 'cancelReservation'];
+  displayedColumns: string[] = ['companyName', 'price', 'start', 'qrCode'];
   reservations: MatTableDataSource<Reservation>;
   page: number = 0;
   size: number = 5;
   totalReservations = 0;
-  
+
   sortField: string = 'start';
-  sortDirection: string = 'desc'; 
+  sortDirection: string = 'desc';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
   constructor(
     private reservationService: ReservationService,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef
@@ -60,7 +57,7 @@ export class ReservationHistoryComponent implements AfterViewInit {
   }
 
   loadReservations(): void {
-    this.reservationService.getUpcomingReservationsByUser(
+    this.reservationService.getPastReservationsByUser(
       this.user.id,
       this.page,
       this.size,
@@ -72,7 +69,7 @@ export class ReservationHistoryComponent implements AfterViewInit {
       this.totalReservations = result.totalElements;
     });
   }
-  
+
   onPageChange(event: PageEvent) {
     this.size = event.pageSize;
     this.page = event.pageIndex;
@@ -94,48 +91,6 @@ export class ReservationHistoryComponent implements AfterViewInit {
     } else {
       return 'N/A';
     }
-  }
-
-  cancelReservation(reservation: Reservation): void {
-    if (reservation.isCancelled) {
-      this.openSnackBar('Reservation is already cancelled.', 'Close');
-    } else {
-      this.showCancelConfirmation(reservation);
-    }
-  }
-  
-  private showCancelConfirmation(reservation: Reservation): void {
-    const confirmation = confirm('Are you sure you want to cancel the reservation?');
-    if (confirmation) {
-      this.confirmCancellation(reservation);
-    }
-  }
-  
-  private confirmCancellation(reservation: Reservation): void {
-    this.reservationService.cancelReservation(reservation).subscribe(
-      () => {
-        this.handleCancellationSuccess();
-      },
-      (error) => {
-        this.handleCancellationError(error);
-      }
-    );
-  }
-  
-  private handleCancellationSuccess(): void {
-    this.openSnackBar('Reservation cancelled.', 'Close');
-    this.loadReservations();
-  }
-  
-  private handleCancellationError(error: any): void {
-    this.openSnackBar('Error cancelling reservation.', 'Close');
-  }
-
-  openSnackBar(message: string, action: string, verticalPosition: MatSnackBarVerticalPosition = 'bottom') {
-    this.snackBar.open(message, action, {
-      duration: 30000,
-      verticalPosition: verticalPosition,
-    });
   }
 
   getBase64Image(base64: string): string {
