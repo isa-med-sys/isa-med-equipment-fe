@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReservationHistoryComponent } from './reservation-history/reservation-history.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -13,7 +14,8 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
   imports: [
     CommonModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   exports: [
     ReservationHistoryComponent
