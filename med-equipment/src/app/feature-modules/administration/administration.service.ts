@@ -10,6 +10,7 @@ import { Equipment } from "../../shared/model/equipment";
 import { Calendar } from 'src/app/shared/model/calendar';
 import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 import { TimeSlot } from "../../shared/model/timeslot";
+import { Reservation } from 'src/app/shared/model/reservation';
 
 @Injectable({
   providedIn: 'root'
@@ -106,5 +107,13 @@ export class AdministrationService {
   canDeleteEquipment(id: number, equipment: Equipment): Observable<boolean> {
     const params = new HttpParams().set('equipmentId', equipment.id.toString());
     return this.http.get<boolean>(environment.apiHost + `reservations/equipment-delete/${id}`, { params });
+  }
+
+  uploadImage(id: number, file: File): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/code/${id}`, file);
+  }
+
+  completeOrder(reservation: Reservation): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/complete-reservation`, reservation);
   }
 }

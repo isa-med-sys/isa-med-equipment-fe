@@ -12,6 +12,7 @@ import { ChangePasswordComponent } from 'src/app/feature-modules/administration/
 import { CompanyAdminProfileComponent } from 'src/app/feature-modules/administration/company-admin-profile/company-admin-profile.component';
 import { CalendarComponent } from 'src/app/feature-modules/administration/calendar/calendar.component';
 import { ReservationHistoryComponent } from 'src/app/feature-modules/reservation/reservation-history/reservation-history.component';
+import { OrderTakingComponent } from 'src/app/feature-modules/administration/order-taking/order-taking.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'admin/profile', component: SystemAdminProfileComponent},
   { path: 'company-admin/profile', component: CompanyAdminProfileComponent },
   { path: 'calendar', component: CalendarComponent },
+  { path: 'orders', component: OrderTakingComponent },
   { path: 'companies', component: CompanySearchComponent },
   { path: 'company/:id', component: CompanyProfileComponent },
 ];
