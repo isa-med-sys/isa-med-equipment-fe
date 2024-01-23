@@ -3,7 +3,7 @@ import { Equipment } from "./equipment";
 export interface Order {
     customer: string;
     id: number;
-    equipment: Equipment[];
+    equipment: string[];
     timeslotStart: Date;
     timeslotEnd: Date;
     isValid: boolean;
