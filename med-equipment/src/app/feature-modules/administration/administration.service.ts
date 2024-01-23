@@ -98,13 +98,4 @@ export class AdministrationService {
     const params = new HttpParams().set('companyId', companyId.toString());
     return this.http.post<TimeSlot>(environment.apiHost + `calendars/time-slots`, timeSlot, { params });
   }
-
-  canUpdateEquipment(id: number, equipment: Equipment): Observable<boolean> {
-    return this.http.put<boolean>(environment.apiHost + `reservations/equipment-update/${id}`, equipment);
-  }
-
-  canDeleteEquipment(id: number, equipment: Equipment): Observable<boolean> {
-    const params = new HttpParams().set('equipmentId', equipment.id.toString());
-    return this.http.get<boolean>(environment.apiHost + `reservations/equipment-delete/${id}`, { params });
-  }
 }

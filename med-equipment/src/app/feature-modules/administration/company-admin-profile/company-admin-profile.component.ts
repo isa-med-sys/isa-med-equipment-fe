@@ -6,7 +6,8 @@ import { AdministrationService } from '../administration.service';
 import { MatTableDataSource } from "@angular/material/table";
 import { Equipment } from "../../../shared/model/equipment";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import {co} from "@fullcalendar/core/internal-common";
+import {co, e} from "@fullcalendar/core/internal-common";
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -44,7 +45,7 @@ export class CompanyAdminProfileComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder) {
+  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.adminId = authService.user$.value.id;
 
     this.dataSource = new MatTableDataSource<Equipment>();
@@ -243,23 +244,19 @@ export class CompanyAdminProfileComponent {
   }
 
   deleteEquipment(eq: Equipment) {
-
     const index = this.equipment.indexOf(eq);
 
     if (index !== -1) {
-
       if (this.equipment.at(index)) {
-        this.administrationService.canDeleteEquipment(this.admin.company.id, this.equipment.at(index)!).subscribe(result => {
-
-          if (result) {
-            this.equipment.splice(index, 1);
-            this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
-
-              this.loadEquipment();
-              console.log("Deleted: " + eq.name);
-            });
-          } else {
-            console.log("Equipment can't be deleted!");
+        eq.remove = true;
+        this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe({
+          next: result => {
+            this.loadEquipment();
+            console.log("Deleted: " + eq.name);
+          },
+          error: _ => {
+            eq.remove = undefined;
+            this.openSnackBar(`Can remove equipment because it's reserved!\n`, 'Close');
           }
         });
       } else {
@@ -322,24 +319,20 @@ export class CompanyAdminProfileComponent {
 
         console.log(this.equipment);
 
-        // update provera
-        this.administrationService.canUpdateEquipment(this.admin.company.id, this.equipment[index]).subscribe(result => {
-          if (result) {
-            this.administrationService.updateEquipment(this.equipment[index].id, this.equipment[index]).subscribe(result => {
+        this.administrationService.updateEquipment(this.equipment[index].id, this.equipment[index]).subscribe(result => {
+          console.log(result);
 
-              console.log(result);
-
-              this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe(result => {
-
-                this.loadEquipment();
-                console.log(this.equipment);
-                console.log("Equipment updated.");
-                this.showEditForm = false;
-              });
-            });
-          } else {
-            console.log("Equipment can't be updated!");
-          }
+          this.administrationService.updateEquipmentInCompany(this.admin.company.id, this.equipment).subscribe({
+            next: (resutl) => {
+              this.loadEquipment();
+              console.log(this.equipment);
+              console.log("Equipment updated.");
+              this.showEditForm = false;
+            },
+            error: _ => {
+              this.openSnackBar(`Can decrease quantity of equipment because it's reserved!\n`, 'Close');
+            }
+          });
         });
       }
     }
@@ -358,5 +351,12 @@ export class CompanyAdminProfileComponent {
   discardForm() {
     this.showAddForm = false;
     this.showEditForm = false;
+  }
+
+  openSnackBar(message: string, action: string, verticalPosition: MatSnackBarVerticalPosition = 'bottom') {
+    this.snackBar.open(message, action, {
+      duration: 30000,
+      verticalPosition: verticalPosition,
+    });
   }
 }
