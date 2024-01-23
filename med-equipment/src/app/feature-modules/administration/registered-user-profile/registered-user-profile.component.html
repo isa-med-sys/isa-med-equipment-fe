@@ -65,7 +65,12 @@
         <p><strong>Company Information:</strong> {{ user.companyInfo }}</p>
         <p><strong>Address:</strong> {{ user.address.street }} {{ user.address.streetNumber }}, {{ user.address.city }},
             {{ user.address.country }}</p>
-        <p><strong>Penalty Points:</strong> {{ user.penaltyPoints }}</p>
+        <p>
+            <strong>Penalty Points:</strong> {{ user.penaltyPoints }}
+            <span title="Penalty points are reset every first of the month">
+                <i class="material-icons">info</i>
+            </span>
+        </p>
         <button mat-button (click)="toggleEditMode()">Edit Profile</button>
     </div>
 </div>
