@@ -1,0 +1,12 @@
+button {
+    background-color: #c2c2c2;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.qr-button:hover {
+    background-color: #2f9fd3;
+}

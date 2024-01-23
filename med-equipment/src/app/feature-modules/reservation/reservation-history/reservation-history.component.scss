@@ -1,5 +1,5 @@
 button {
-    background-color: #6b6b6b;
+    background-color: #c2c2c2;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -7,6 +7,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.qr-button:hover {
+    background-color: #2f9fd3;
+}
+
+.cancel-button:hover {
     background-color: #d32f2f;
 }

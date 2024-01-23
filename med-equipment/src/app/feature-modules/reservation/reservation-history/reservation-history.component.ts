@@ -139,6 +139,10 @@ export class ReservationHistoryComponent implements AfterViewInit {
   }
 
   getBase64Image(base64: string): string {
-    return 'data:image/png;base64,' + base64;
+    console.log(base64);
+    if(base64)
+      return 'data:image/png;base64,' + base64;
+
+    return 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Rickrolling_QR_code.png'
   }
 }
