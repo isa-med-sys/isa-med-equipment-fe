@@ -14,7 +14,7 @@ export class ReservationService {
 
   getPastReservationsByUser(userId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
     const params = this.buildParams(userId, page, size, sortBy, sortDirection);
-    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/upcoming`, { params });
+    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/past`, { params });
   }
 
   getUpcomingReservationsByUser(userId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
