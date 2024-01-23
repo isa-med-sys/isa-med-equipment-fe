@@ -3,7 +3,7 @@
 <button (click)="uploadImage()">Upload Image</button>
 
 <div *ngIf="order">
-    <div *ngIf="order.isValid">
+    <div *ngIf="order.isValid  && !order.isTaken">
         <p>{{order.customer}}</p>
         <p>{{order.timeslotStart}}</p>
         <p>{{order.timeslotEnd}}</p>
@@ -12,7 +12,10 @@
         <p>{{order.equipment}}</p>
         <button (click)="finishTakingOrder()">Finish Primopredaju</button>
     </div>
-    <div *ngIf="!order.isValid">
+    <div *ngIf="!order.isValid && !order.isTaken"> <!-- ponistava order i na pogresnog admina -->
         <p>Rok za preuzimanje je prosao, rezervacija se brise, sudija svira penal komada 2</p>
+    </div>
+    <div *ngIf="order.isTaken">
+        <p>Vec je preuzeto</p>
     </div>
 </div>

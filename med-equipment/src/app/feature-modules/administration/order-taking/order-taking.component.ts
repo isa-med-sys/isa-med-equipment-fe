@@ -28,6 +28,7 @@ export class OrderTakingComponent {
       .subscribe({
         next: (result) => {
           this.order = result;
+          console.log(result);
           if(!this.order?.isValid) {
             // izbaciti ga iz tvoje liste (isc f isp f)
           }
