@@ -3,4 +3,6 @@ export interface Address {
     streetNumber: string;
     city: string;
     country: string;
+    longitude: string;
+    latitude: string;
 }

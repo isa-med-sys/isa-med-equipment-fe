@@ -8,6 +8,7 @@ import { Equipment } from "../../../shared/model/equipment";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import {co, e} from "@fullcalendar/core/internal-common";
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-company-admin-profile',
@@ -45,7 +46,7 @@ export class CompanyAdminProfileComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(private administrationService: AdministrationService, authService: AuthService, private fb: FormBuilder, private snackBar: MatSnackBar, private http: HttpClient) {
     this.adminId = authService.user$.value.id;
 
     this.dataSource = new MatTableDataSource<Equipment>();
@@ -161,18 +162,39 @@ export class CompanyAdminProfileComponent {
   saveCompanyChanges() {
     if (this.adminId && this.companyForm.valid) {
       const updatedData = this.companyForm.value;
-
-      this.administrationService.updateCompany(this.admin.company.id, updatedData).subscribe({
-        next: (result) => {
-          console.log('Company updated successfully:', result);
-          this.admin.company = result;
-          this.isEditableCompany = false;
-          this.initializeCompanyForm();
-        },
-        error: (err) => {
-          this.errorMessage = err.text;
-        }
-      });
+      const address = this.companyForm.get('address')?.value;
+    
+      this.getLatLongFromAddressOpenCage(address.street + ' ' + address.streetNumber + ' ' + address.city + ' ' + address.country)
+        .subscribe({
+          next: (locationResult: any) => {
+            if (locationResult && locationResult.results && locationResult.results.length > 0) {
+              const location = locationResult.results[0].geometry;
+              const latitude = location.lat;
+              const longitude = location.lng;
+    
+              const updatedUserData = this.companyForm.value;
+              updatedUserData.address.latitude = latitude;
+              updatedUserData.address.longitude = longitude;
+    
+              this.administrationService.updateCompany(this.admin.company.id, updatedUserData).subscribe({
+                next: (result) => {
+                  console.log('Company updated successfully:', result);
+                  this.admin.company = result;
+                  this.isEditableCompany = false;
+                  this.initializeCompanyForm();
+                },
+                error: (err) => {
+                  this.errorMessage = err.text;
+                }
+              });
+            } else {
+              console.error('Error: Unable to retrieve location information.');
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching location:', err);
+          },
+        });
     }
   }
 
@@ -358,5 +380,12 @@ export class CompanyAdminProfileComponent {
       duration: 30000,
       verticalPosition: verticalPosition,
     });
+  }
+
+  private getLatLongFromAddressOpenCage(address: string) {
+    const apiKey = '7087c471f8054150abf1cd6421ae2324';
+    const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&language=en&limit=1`;
+  
+    return this.http.get(apiUrl);
   }
 }
