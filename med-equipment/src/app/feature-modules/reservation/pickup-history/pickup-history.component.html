@@ -4,7 +4,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
         <td mat-cell *matCellDef="let reservation"> {{ reservation.companyName }} </td>
     </ng-container>
-    
+
     <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
         <td mat-cell *matCellDef="let reservation">{{ reservation.price }} €</td>
@@ -19,13 +19,6 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let reservation">
             <button mat-button class="qr-button" (click)="openQrCodePopup(reservation.qrCode)">QR Code</button>
-        </td>
-    </ng-container>
-
-    <ng-container matColumnDef="cancelReservation">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let reservation">
-            <button mat-button class="cancel-button" (click)="cancelReservation(reservation)">Cancel</button>
         </td>
     </ng-container>
 
