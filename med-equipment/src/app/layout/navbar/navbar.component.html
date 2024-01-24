@@ -2,7 +2,7 @@
     <div>
         <div id="buttons">
             <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
-            <button *ngIf="user && (user.role == 'REGISTERED_USER' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
+            <button *ngIf="user && (user.email === '' || user.role == 'REGISTERED_USER' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
                 [routerLink]="['companies']">Companies</button>
             <button *ngIf="user && (user.role == 'COMPANY_ADMIN' || user.role == 'SYSTEM_ADMIN')" mat-raised-button color="accent"
                 [routerLink]="['equipment']">Equipment</button>

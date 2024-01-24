@@ -91,21 +91,26 @@ li.reservation-item {
 }
 
 .equipment-table {
-  width: 400px;
+  width: 60%;
   border-collapse: collapse;
 }
 
 .equipment-table td {
   border: none;
-  padding: 5px;
+  padding: 10px;
+  text-align: center;
 }
 
 .equipment-table td:first-child {
-  width: 200px;
+  width: 20%;
+}
+
+.equipment-table td:not(:first-child) {
+  width: 15%;
 }
 
 .equipment-table td button {
-  margin: 0; 
+  margin: 5px;
 }
 
 .calendar-container {

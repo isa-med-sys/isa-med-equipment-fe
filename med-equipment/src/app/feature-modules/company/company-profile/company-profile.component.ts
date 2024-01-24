@@ -12,9 +12,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { User } from 'src/app/authentication/model/user.model';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { CustomTimeSlot } from 'src/app/shared/model/custom-time-slot';
 import { createDuration } from '@fullcalendar/core/internal';
 import { finalize } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { TextPopupComponent } from 'src/app/shared/text-popup/text-popup.component';
 
 @Component({
   selector: 'app-company-profile',
@@ -81,6 +82,7 @@ export class CompanyProfileComponent implements OnInit {
     private companyService: CompanyService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private changeDetector: ChangeDetectorRef
   ) {
     this.authService.user$.subscribe(user => {
@@ -107,6 +109,12 @@ export class CompanyProfileComponent implements OnInit {
         this.company = company;
         this.updateCalendarOptions();
       }
+    });
+  }
+
+  expandDescription(equipment: any): void {
+    this.dialog.open(TextPopupComponent, {
+      data: { description: equipment.description }
     });
   }
 

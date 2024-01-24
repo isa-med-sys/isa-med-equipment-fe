@@ -4,10 +4,12 @@ import { ImagePopupComponent } from './image-popup/image-popup.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { TextPopupComponent } from './text-popup/text-popup.component';
 
 @NgModule({
   declarations: [
-    ImagePopupComponent
+    ImagePopupComponent,
+    TextPopupComponent
   ],
   imports: [
     CommonModule,
