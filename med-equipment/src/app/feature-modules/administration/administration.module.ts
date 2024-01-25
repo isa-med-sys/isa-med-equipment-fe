@@ -12,6 +12,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from "@angular/material/select";
 import { OrderTakingComponent } from './order-taking/order-taking.component';
+import { TempcompComponent } from './tempcomp/tempcomp.component';
 
 
 
@@ -22,7 +23,8 @@ import { OrderTakingComponent } from './order-taking/order-taking.component';
     ChangePasswordComponent,
     CompanyAdminProfileComponent,
     CalendarComponent,
-    OrderTakingComponent
+    OrderTakingComponent,
+    TempcompComponent
   ],
   imports: [
     CommonModule,
