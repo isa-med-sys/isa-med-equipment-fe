@@ -1,11 +1,11 @@
 <!-- srediti izgled i dodati drugu alternativu, istestirati funkcionalnosti, ca profil dugme tamo -->
 
-<div>
+<div class="container">
   <input type="file" (change)="onFileSelected($event)" accept="image/*">
   <button (click)="uploadImage()">Upload Image</button>
 </div>
 
-<div>
+<div class="container">
   <table mat-table class="mat-elevation-z8" [dataSource]="reservations" matSort>
     <ng-container matColumnDef="companyName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
@@ -36,8 +36,8 @@
                  (page)="onPageChange($event)"></mat-paginator>
 </div>
 
-<div *ngIf="order">
-  <div *ngIf="order.isValid  && !order.isTaken">
+<div class="container" *ngIf="order">
+  <div class="data" *ngIf="order.isValid  && !order.isTaken">
     <p>{{order.customer}}</p>
     <p>{{order.timeslotStart}}</p>
     <p>{{order.timeslotEnd}}</p>
