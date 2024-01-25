@@ -24,13 +24,13 @@ export class ReservationHistoryComponent implements AfterViewInit {
   page: number = 0;
   size: number = 5;
   totalReservations = 0;
-  
+
   sortField: string = 'start';
-  sortDirection: string = 'desc'; 
+  sortDirection: string = 'desc';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
+
   constructor(
     private reservationService: ReservationService,
     private authService: AuthService,
@@ -72,7 +72,7 @@ export class ReservationHistoryComponent implements AfterViewInit {
       this.totalReservations = result.totalElements;
     });
   }
-  
+
   onPageChange(event: PageEvent) {
     this.size = event.pageSize;
     this.page = event.pageIndex;
@@ -103,14 +103,14 @@ export class ReservationHistoryComponent implements AfterViewInit {
       this.showCancelConfirmation(reservation);
     }
   }
-  
+
   private showCancelConfirmation(reservation: Reservation): void {
     const confirmation = confirm('Are you sure you want to cancel the reservation?');
     if (confirmation) {
       this.confirmCancellation(reservation);
     }
   }
-  
+
   private confirmCancellation(reservation: Reservation): void {
     this.reservationService.cancelReservation(reservation).subscribe(
       () => {
@@ -121,12 +121,12 @@ export class ReservationHistoryComponent implements AfterViewInit {
       }
     );
   }
-  
+
   private handleCancellationSuccess(): void {
     this.openSnackBar('Reservation cancelled.', 'Close');
     this.loadReservations();
   }
-  
+
   private handleCancellationError(error: any): void {
     this.openSnackBar('Error cancelling reservation.', 'Close');
   }
