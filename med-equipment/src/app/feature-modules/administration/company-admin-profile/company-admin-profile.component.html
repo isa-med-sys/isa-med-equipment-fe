@@ -95,8 +95,11 @@
       </form>
     </div>
   </div>
-  <button mat-raised-button color="accent" [routerLink]="['../../calendar']">Go to Calendar</button>
-  <button mat-raised-button color="accent" [routerLink]="['../../orders']">Go to Orders</button> <!-- izgled na stranici -->
+  <div class="options">
+    <button mat-raised-button color="accent" [routerLink]="['../../calendar']">Go to Calendar</button>
+    <button mat-raised-button color="accent" [routerLink]="['../../orders']">Go to Orders</button>
+    <button mat-raised-button color="accent" [routerLink]="['../../delivery']">Track delivery</button>
+  </div>
   <div class="admins" *ngIf="admin">
     <h3>Admins</h3>
     <p *ngFor="let a of admins">{{ a.name }} {{ a.surname }}</p>

@@ -14,7 +14,7 @@ import { CalendarComponent } from 'src/app/feature-modules/administration/calend
 import { ReservationHistoryComponent } from 'src/app/feature-modules/reservation/reservation-history/reservation-history.component';
 import { OrderTakingComponent } from 'src/app/feature-modules/administration/order-taking/order-taking.component';
 import { PickupHistoryComponent } from 'src/app/feature-modules/reservation/pickup-history/pickup-history.component';
-import { TempcompComponent } from 'src/app/feature-modules/administration/tempcomp/tempcomp.component';
+import { DeliveryComponent } from 'src/app/feature-modules/administration/delivery/delivery.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,7 +31,7 @@ const routes: Routes = [
   { path: 'orders', component: OrderTakingComponent },
   { path: 'companies', component: CompanySearchComponent },
   { path: 'company/:id', component: CompanyProfileComponent },
-  { path: 'temp', component: TempcompComponent },
+  { path: 'delivery', component: DeliveryComponent },
 ];
 
 @NgModule({

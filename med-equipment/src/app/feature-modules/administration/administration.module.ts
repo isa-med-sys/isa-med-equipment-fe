@@ -13,8 +13,7 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from "@angular/material/select";
 import { OrderTakingComponent } from './order-taking/order-taking.component';
 import { TempcompComponent } from './tempcomp/tempcomp.component';
-
-
+import { DeliveryComponent } from './delivery/delivery.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,8 @@ import { TempcompComponent } from './tempcomp/tempcomp.component';
     CompanyAdminProfileComponent,
     CalendarComponent,
     OrderTakingComponent,
-    TempcompComponent
+    TempcompComponent,
+    DeliveryComponent
   ],
   imports: [
     CommonModule,
