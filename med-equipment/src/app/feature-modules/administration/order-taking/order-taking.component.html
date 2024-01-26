@@ -38,12 +38,17 @@
 
 <div class="container" *ngIf="order">
   <div class="data" *ngIf="order.isValid  && !order.isTaken">
-    <p>{{order.customer}}</p>
-    <p>{{order.timeslotStart}}</p>
-    <p>{{order.timeslotEnd}}</p>
-    <p>{{order.id}}</p>
+    <p>Customer: {{order.customer}}</p>
+    <p>Start time: {{ formatDate(order.timeslotStart) }}</p>
+    <p>End time: {{ formatDate(order.timeslotEnd) }}</p>
+    <p> No. of reservation: {{order.id}}</p>
 
-    <p>{{order.equipment}}</p>
+    <p>Equipment: {{order.equipment}}</p>
+
+    <div *ngIf="!order.isRightAdmin">
+      <p>Nije tvoj termin</p>
+    </div>
+
     <button (click)="finishTakingOrder()">Finish Primopredaju</button>
   </div>
   <div *ngIf="!order.isValid && !order.isTaken"> <!-- ponistava order i na pogresnog admina -->
