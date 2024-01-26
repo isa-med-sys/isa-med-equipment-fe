@@ -1,21 +1,114 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { AdministrationService } from '../administration.service';
 import { AuthService } from 'src/app/authentication/auth.service';
 import { Reservation } from 'src/app/shared/model/reservation';
 import { Order } from 'src/app/shared/model/order';
+import { CompanyAdmin } from "../../../shared/model/company-admin";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSort, SortDirection } from "@angular/material/sort";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-order-taking',
   templateUrl: './order-taking.component.html',
   styleUrls: ['./order-taking.component.scss']
 })
-export class OrderTakingComponent {
+export class OrderTakingComponent implements OnInit {
   selectedFile!: File;
   adminId: number;
+  admin?: CompanyAdmin;
   order?: Order;
 
-  constructor(private administrationService: AdministrationService, authService: AuthService) { 
+  displayedColumns: string[] = ['companyName', 'price', 'start', 'showOrder'];
+  reservations: MatTableDataSource<Reservation>;
+  page: number = 0;
+  size: number = 5;
+  totalReservations = 0;
+
+  sortField: string = 'start';
+  sortDirection: string = 'desc';
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(private administrationService: AdministrationService, authService: AuthService,
+              private cdr: ChangeDetectorRef,
+              private datePipe: DatePipe) {
     this.adminId = authService.user$.value.id;
+    this.reservations = new MatTableDataSource<Reservation>();
+  }
+
+  ngOnInit() {
+    // this.sort.direction = this.sortDirection as SortDirection;
+    // this.sort.active = this.sortField;
+    //
+    // this.sort.sortChange.subscribe(() => {
+    //   this.sortField = this.sort.active;
+    //   this.sortDirection = this.sort.direction as string;
+    //   this.getCompanyAdmin();
+    // });
+
+    this.cdr.detectChanges();
+    this.getCompanyAdmin();
+  }
+
+  onPageChange(event: PageEvent) {
+    this.size = event.pageSize;
+    this.page = event.pageIndex;
+    this.getAllOrders();
+  }
+
+  getCompanyAdmin() {
+    if (this.adminId) {
+      this.administrationService.getCompanyAdmin(this.adminId).subscribe({
+        next: (result) => {
+          this.admin = result;
+          this.getAllOrders();
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  getAllOrders() {
+    this.administrationService.getAllOrders(
+      this.admin!.company.id,
+      this.page,
+      this.size,
+      this.sortField,
+      this.sortDirection
+    ).subscribe({
+      next: (result) => {
+        this.reservations = new MatTableDataSource<Reservation>();
+        this.reservations.data = result.content;
+        this.totalReservations = result.totalElements;
+        console.log(result.content);
+      },
+    });
+  }
+
+  showReservation(reservation: Reservation): void {
+    console.log(reservation);
+    if (reservation.id){
+      this.administrationService.getOrder(reservation.id, this.adminId).subscribe({
+        next: (result) => {
+          this.order = result;
+          console.log(result);
+        },
+      });
+    }
+  }
+
+  formatDate(dateArray: number[] | null): string {
+    if (dateArray) {
+      const dateObject = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4]);
+      return this.datePipe.transform(dateObject, ' HH:mm dd.MM.yyyy') ?? 'N/A';
+    } else {
+      return 'N/A';
+    }
   }
 
   onFileSelected(event: any): void {

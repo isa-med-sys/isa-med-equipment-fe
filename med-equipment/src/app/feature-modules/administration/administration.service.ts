@@ -11,6 +11,7 @@ import { Calendar } from 'src/app/shared/model/calendar';
 import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 import { TimeSlot } from "../../shared/model/timeslot";
 import { Reservation } from 'src/app/shared/model/reservation';
+import {PagedResults} from "../../shared/model/paged-results.model";
 
 @Injectable({
   providedIn: 'root'
@@ -115,5 +116,25 @@ export class AdministrationService {
 
   completeOrder(reservation: Reservation): Observable<any> {
     return this.http.post(environment.apiHost + `reservations/complete-reservation`, reservation);
+  }
+
+  getAllOrders(companyId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
+    const params = this.buildParams(companyId, page, size, sortBy, sortDirection);
+    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/orders`, { params });
+  }
+
+  getOrder(orderId: number, userId: number): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/order/${orderId}`, userId);
+  }
+
+  private buildParams(companyId: number, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('companyId', companyId.toString())
+      .set('sort', sortBy)
+      .set('direction', sortDirection);
+
+    return params;
   }
 }
