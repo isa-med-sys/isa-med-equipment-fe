@@ -1,9 +1,9 @@
+import { AuthService } from 'src/app/authentication/auth.service';
+import { AdministrationService } from '../administration.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { AuthService } from 'src/app/authentication/auth.service';
-
+import * as Stomp from 'stompjs';
 import * as L from 'leaflet';
 
 @Component({
@@ -18,17 +18,27 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   isLoaded: boolean = false;
   isCustomSocketOpened = false;
   messages: { latitude: number, longitude: number }[] = [];
+  companyId!: number;
   adminId: number;
 
   map: L.Map | undefined;
   marker: L.Marker | undefined;
 
-  constructor(private authService: AuthService) {
+  constructor(private adminService: AdministrationService, private authService: AuthService) {
     this.adminId = authService.user$.value.id;
   }
 
   ngOnInit() {
-    this.initializeWebSocketConnection();
+    this.adminService.getCompanyAdmin(this.adminId)
+      .subscribe({
+        next: (result) => {
+          this.companyId = result.company.id;
+          this.initializeWebSocketConnection();
+        },
+        error: (err) => {
+          console.error('Error');
+        }
+      });
     this.initMap();
   }
 
@@ -56,7 +66,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   openSocket() {
     if (this.isLoaded) {
       this.isCustomSocketOpened = true;
-      this.stompClient.subscribe("/socket-publisher/" + this.adminId, (message: { body: string }) => {
+      this.stompClient.subscribe("/socket-publisher/" + this.companyId, (message: { body: string }) => {
         this.handleResult(message);
       });
     }
@@ -102,7 +112,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   /* 
   to verify the simulation, for company.admin@gmail.com, use these coordinates
   {
-  "userId": 2,
+  "companyId": 1,
   "longitudeStart": 19.83188153784739,
   "latitudeStart": 45.26224929945993,
   "longitudeEnd": 19.83716012528152,
