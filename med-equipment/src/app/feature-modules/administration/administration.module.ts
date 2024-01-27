@@ -24,7 +24,7 @@ import { ContractManagementComponent } from './contract-management/contract-mana
     CompanyAdminProfileComponent,
     CalendarComponent,
     OrderTakingComponent,
-    DeliveryComponent
+    DeliveryComponent,
     ContractManagementComponent
   ],
   imports: [
