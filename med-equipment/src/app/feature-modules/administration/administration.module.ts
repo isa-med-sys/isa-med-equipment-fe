@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from "@angular/material/select";
 import { OrderTakingComponent } from './order-taking/order-taking.component';
 import { TempcompComponent } from './tempcomp/tempcomp.component';
+import { ContractManagementComponent } from './contract-management/contract-management.component';
 
 
 
@@ -24,7 +25,8 @@ import { TempcompComponent } from './tempcomp/tempcomp.component';
     CompanyAdminProfileComponent,
     CalendarComponent,
     OrderTakingComponent,
-    TempcompComponent
+    TempcompComponent,
+    ContractManagementComponent
   ],
   imports: [
     CommonModule,

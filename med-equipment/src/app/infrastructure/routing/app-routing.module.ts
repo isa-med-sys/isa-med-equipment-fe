@@ -15,6 +15,7 @@ import { ReservationHistoryComponent } from 'src/app/feature-modules/reservation
 import { OrderTakingComponent } from 'src/app/feature-modules/administration/order-taking/order-taking.component';
 import { PickupHistoryComponent } from 'src/app/feature-modules/reservation/pickup-history/pickup-history.component';
 import { TempcompComponent } from 'src/app/feature-modules/administration/tempcomp/tempcomp.component';
+import { ContractManagementComponent } from 'src/app/feature-modules/administration/contract-management/contract-management.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'user/reservations', component: ReservationHistoryComponent },
   { path: 'user/pickups', component: PickupHistoryComponent },
   { path: 'change-password', component: ChangePasswordComponent },
-  { path: 'admin/profile', component: SystemAdminProfileComponent},
+  { path: 'admin/profile', component: SystemAdminProfileComponent },
+  { path: 'company-admin/contracts', component: ContractManagementComponent },
   { path: 'company-admin/profile', component: CompanyAdminProfileComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'orders', component: OrderTakingComponent },

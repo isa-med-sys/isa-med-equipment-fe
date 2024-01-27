@@ -17,6 +17,8 @@
 
             <!-- Company Admin -->
             <button *ngIf="user && user.role == 'COMPANY_ADMIN'" mat-raised-button color="accent"
+                [routerLink]="['company-admin/contracts']">Contracts</button>
+            <button *ngIf="user && user.role == 'COMPANY_ADMIN'" mat-raised-button color="accent"
                 [routerLink]="['company-admin/profile']">Profile</button>
 
             <!-- System Admin -->
