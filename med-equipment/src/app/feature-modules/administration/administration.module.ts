@@ -13,6 +13,8 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from "@angular/material/select";
 import { OrderTakingComponent } from './order-taking/order-taking.component';
 import { DeliveryComponent } from './delivery/delivery.component';
+import { ContractManagementComponent } from './contract-management/contract-management.component';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { DeliveryComponent } from './delivery/delivery.component';
     CalendarComponent,
     OrderTakingComponent,
     DeliveryComponent
+    ContractManagementComponent
   ],
   imports: [
     CommonModule,

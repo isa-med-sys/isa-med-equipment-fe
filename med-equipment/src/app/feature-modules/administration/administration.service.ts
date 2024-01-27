@@ -12,6 +12,7 @@ import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 import { TimeSlot } from "../../shared/model/timeslot";
 import { Reservation } from 'src/app/shared/model/reservation';
 import {PagedResults} from "../../shared/model/paged-results.model";
+import { Contract } from 'src/app/shared/model/contract';
 
 @Injectable({
   providedIn: 'root'
@@ -127,14 +128,20 @@ export class AdministrationService {
     return this.http.post(environment.apiHost + `reservations/order/${orderId}`, userId);
   }
 
-  private buildParams(companyId: number, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
+  getActiveReservationsByCompany(id: number, page: number, size: number): Observable<PagedResults<Contract>> {
+    const params = this.buildParams(id, page, size);
+    return this.http.get<PagedResults<Contract>>(environment.apiHost + `contracts/active`, { params });
+  }
+
+  private buildParams(companyId: number, page: number, size: number, sortBy?: string, sortDirection?: string): HttpParams {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
       .set('companyId', companyId.toString())
-      .set('sort', sortBy)
-      .set('direction', sortDirection);
 
+    if (sortBy) params.set('sort', sortBy);
+    if (sortDirection) params.set('direction', sortDirection);
+  
     return params;
   }
 }
