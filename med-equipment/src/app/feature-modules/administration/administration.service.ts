@@ -128,6 +128,10 @@ export class AdministrationService {
     return this.http.post(environment.apiHost + `reservations/order/${orderId}`, userId);
   }
 
+  startSimulation(contractId: number): Observable<any> {
+    return this.http.get(environment.apiHost + `contracts/start/${contractId}`);
+  }
+
   getActiveReservationsByCompany(id: number, page: number, size: number): Observable<PagedResults<Contract>> {
     const params = this.buildParams(id, page, size);
     return this.http.get<PagedResults<Contract>>(environment.apiHost + `contracts/active`, { params });

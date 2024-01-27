@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import { CompanyAdmin } from 'src/app/shared/model/company-admin';
 import { PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contract-management',
@@ -17,13 +19,14 @@ export class ContractManagementComponent implements OnInit {
   user!: User;
   admin!: CompanyAdmin;
 
-  displayedColumns: string[] = ['companyName', 'startDate', 'equipment'];
+  displayedColumns: string[] = ['companyName', 'startDate', 'equipment', 'start'];
   contracts: MatTableDataSource<Contract>;
   page: number = 0;
   size: number = 5;
   totalContracts = 0;
 
-  constructor(private administrationService: AdministrationService, private authService: AuthService, private datePipe: DatePipe) {
+  constructor(private administrationService: AdministrationService, private authService: AuthService, private datePipe: DatePipe,
+                     private snackBar: MatSnackBar, private router: Router,) {
     this.contracts = new MatTableDataSource<Contract>();
     this.authService.user$.subscribe(user => {
       this.user = user;
@@ -69,5 +72,40 @@ export class ContractManagementComponent implements OnInit {
     } else {
       return 'N/A';
     }
+  }
+
+  startDelivery(contract: Contract) {
+    console.log(contract.id);
+    this.administrationService.startSimulation(contract.id).subscribe({
+      next: () => {
+        this.loadContracts();
+        this.openSnackBar('Delivery started.', 'Track');
+      },
+      error: (err) => {
+        this.openErrorSnackBar('Not enough equipment in stock.', 'Close');
+        console.error(err);
+      }
+    });
+  }
+  
+  openErrorSnackBar(message: string, action: string, verticalPosition: MatSnackBarVerticalPosition = 'bottom') {
+    this.snackBar.open(message, action, {
+      duration: 30000,
+      verticalPosition: verticalPosition,
+    });
+  }
+
+  openSnackBar(
+    message: string,
+    action: string,
+    verticalPosition: MatSnackBarVerticalPosition = 'bottom'
+  ) {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 30000,
+      verticalPosition: verticalPosition,
+    });
+    snackBarRef.onAction().subscribe(() => {
+      this.router.navigate(['/delivery']);
+    });
   }
 }
