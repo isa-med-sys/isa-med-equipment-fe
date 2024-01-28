@@ -5,11 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PickupHistoryComponent } from './pickup-history/pickup-history.component';
+import { CustomersComponent } from './customers/customers.component';
 
 @NgModule({
   declarations: [
     ReservationHistoryComponent,
-    PickupHistoryComponent
+    PickupHistoryComponent,
+    CustomersComponent
   ],
   imports: [
     CommonModule,
