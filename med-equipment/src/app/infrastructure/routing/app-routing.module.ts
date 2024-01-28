@@ -16,6 +16,7 @@ import { OrderTakingComponent } from 'src/app/feature-modules/administration/ord
 import { PickupHistoryComponent } from 'src/app/feature-modules/reservation/pickup-history/pickup-history.component';
 import { DeliveryComponent } from 'src/app/feature-modules/administration/delivery/delivery.component';
 import { ContractManagementComponent } from 'src/app/feature-modules/administration/contract-management/contract-management.component';
+import {CustomersComponent} from "../../feature-modules/reservation/customers/customers.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'companies', component: CompanySearchComponent },
   { path: 'company/:id', component: CompanyProfileComponent },
   { path: 'delivery', component: DeliveryComponent },
+  { path: 'customers', component: CustomersComponent },
 ];
 
 @NgModule({

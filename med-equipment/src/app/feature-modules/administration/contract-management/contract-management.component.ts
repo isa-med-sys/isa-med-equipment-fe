@@ -67,7 +67,7 @@ export class ContractManagementComponent implements OnInit {
 
   formatDate(dateArray: number[] | null): string {
     if (dateArray) {
-      const dateObject = new Date(dateArray[0], dateArray[1], dateArray[2]);
+      const dateObject = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
       return this.datePipe.transform(dateObject, 'dd.MM.yyyy') ?? 'N/A';
     } else {
       return 'N/A';
