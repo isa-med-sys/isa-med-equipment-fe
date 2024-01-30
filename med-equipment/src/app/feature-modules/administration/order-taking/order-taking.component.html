@@ -1,8 +1,9 @@
 <!-- srediti izgled i dodati drugu alternativu, istestirati funkcionalnosti, ca profil dugme tamo -->
 
-<div class="container">
+<div class="top-container">
+  <p>Upload QR Code: </p>
   <input type="file" (change)="onFileSelected($event)" accept="image/*">
-  <button (click)="uploadImage()">Upload Image</button>
+  <button class="action-button" (click)="uploadImage()">Upload</button>
 </div>
 
 <div class="container">
@@ -25,7 +26,7 @@
     <ng-container matColumnDef="showOrder">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let reservation">
-        <button mat-button (click)="showReservation(reservation)">Show</button>
+        <button class="action-button" (click)="showReservation(reservation)">Show</button>
       </td>
     </ng-container>
 
@@ -49,12 +50,21 @@
       <p>Nije tvoj termin</p>
     </div>
 
-    <button (click)="finishTakingOrder()">Finish Primopredaju</button>
+    <button class="action-button" (click)="finishTakingOrder()">Finish Primopredaju</button>
   </div>
-  <div *ngIf="!order.isValid && !order.isTaken"> <!-- ponistava order i na pogresnog admina -->
+  <div *ngIf="order.isCanceled">
+    <p>QR Code je nevazeci.</p>
+  </div>
+  <div *ngIf="!order.isValid && !order.isTaken && !order.isCanceled"> <!-- ponistava order i na pogresnog admina -->
     <p>Rok za preuzimanje je prosao, rezervacija se brise, sudija svira penal komada 2</p>
   </div>
   <div *ngIf="order.isTaken">
     <p>Vec je preuzeto</p>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="notFoundQR">
+    <p>QR Code je nevazeci.</p>
   </div>
 </div>

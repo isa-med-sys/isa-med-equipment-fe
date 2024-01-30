@@ -3,7 +3,7 @@
 </div>
 
 <div class="add-timeslot">
-  <button mat-raised-button (click)="addTimeSlot()">Add Timeslot</button>
+  <button class="action-button" (click)="addTimeSlot()">Add Timeslot</button>
   <div class="form-timeslot" *ngIf="showForm">
     <form [formGroup]="timeslotGroup" (ngSubmit)="createTimeSlot()">
       <div class="form-fields">

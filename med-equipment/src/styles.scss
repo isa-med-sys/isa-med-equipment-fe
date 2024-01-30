@@ -44,3 +44,22 @@ $gray-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Poppins", sans-serif; }
+
+.action-button {
+  background-color: #a5a5a5;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 30px;
+  width: 90px;
+}
+
+.action-button:hover {
+  background-color: #696969;
+}

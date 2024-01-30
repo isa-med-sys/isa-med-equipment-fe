@@ -8,7 +8,7 @@ export interface Order {
     timeslotEnd: TimeDate;
     isValid: boolean;
     isTaken: boolean;
-    isCanaceled: boolean;
+    isCanceled: boolean;
     isRightAdmin: boolean;
 }
 

@@ -96,9 +96,9 @@
     </div>
   </div>
   <div class="options">
-    <button mat-raised-button color="accent" [routerLink]="['../../calendar']">Go to Calendar</button>
-    <button mat-raised-button color="accent" [routerLink]="['../../orders']">Go to Orders</button>
-    <button mat-raised-button color="accent" [routerLink]="['../../delivery']">Track delivery</button>
+    <button class="action-button" [routerLink]="['../../calendar']">Go to Calendar</button>
+    <button class="action-button" [routerLink]="['../../orders']">Go to Orders</button>
+    <button class="action-button" [routerLink]="['../../delivery']">Track delivery</button>
   </div>
   <div class="admins" *ngIf="admin">
     <h3>Admins</h3>
@@ -133,7 +133,7 @@
       </form>
     </mat-expansion-panel>
 
-    <button class="add-eq-button" *ngIf="!showAddForm" mat-raised-button color="primary" (click)="addNewEquipment()">Add New Equipment</button>
+    <button class="action-button" *ngIf="!showAddForm" (click)="addNewEquipment()">Add New Equipment</button>
 
     <div class="equipment-form" *ngIf="showAddForm">
       <form [formGroup]="equipmentForm" (ngSubmit)="onSubmitEq()">

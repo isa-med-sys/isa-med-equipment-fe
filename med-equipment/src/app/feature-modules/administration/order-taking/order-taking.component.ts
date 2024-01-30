@@ -30,6 +30,8 @@ export class OrderTakingComponent implements OnInit {
   sortField: string = 'start';
   sortDirection: string = 'desc';
 
+  notFoundQR: boolean = false;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -93,6 +95,7 @@ export class OrderTakingComponent implements OnInit {
   }
 
   showReservation(reservation: Reservation): void {
+    this.notFoundQR = false;
     console.log(reservation);
     if (reservation.id){
       this.administrationService.getOrder(reservation.id, this.adminId).subscribe({
@@ -115,6 +118,7 @@ export class OrderTakingComponent implements OnInit {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+    this.notFoundQR = false;
   }
 
   uploadImage(): void {
@@ -124,9 +128,11 @@ export class OrderTakingComponent implements OnInit {
         next: (result) => {
           this.order = result;
           console.log(result);
+          this.getAllOrders();
         },
         error: (err) => {
           console.error('Error');
+          this.notFoundQR = true;
         }
       });
     }

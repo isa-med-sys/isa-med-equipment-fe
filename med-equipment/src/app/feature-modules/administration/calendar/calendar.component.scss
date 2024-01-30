@@ -53,6 +53,10 @@ h2 {
   justify-content: center;
   margin: 24px;
 
+  .action-button {
+    width: 130px;
+  }
+
   .form-timeslot {
     max-width: 400px;  // Adjust the max-width as needed
     width: 100%;
@@ -82,7 +86,8 @@ h2 {
     }
 
     button {
-      margin-top: 15px;
+      margin-top: 16px;
+      margin-right: 16px;
     }
   }
 }

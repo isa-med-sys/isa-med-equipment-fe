@@ -2,14 +2,38 @@
   margin: 24px;
 }
 
-input[type="file"] {
-  //display: none;
+.top-container {
+  margin: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: center;
 }
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
+.top-container button {
+  margin: auto 12px;
+}
+
+input[type="file"] {
+  align-content: center;
+  text-align: center;
+  margin: auto 12px;
+  font-family: Roboto, "Poppins", sans-serif;
+}
+
+.data {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.data p, button {
+  margin: 8px auto;
+}
+
+.data button {
+  width: 180px;
 }
 
 table {
@@ -36,9 +60,6 @@ div.order {
   margin-top: 20px;
 }
 
-p {
-  margin-bottom: 12px;
-}
 
 button.finish-button {
   background-color: #ff3333;
