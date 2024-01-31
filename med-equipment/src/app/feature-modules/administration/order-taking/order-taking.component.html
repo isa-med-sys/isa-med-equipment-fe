@@ -1,0 +1,70 @@
+<!-- srediti izgled i dodati drugu alternativu, istestirati funkcionalnosti, ca profil dugme tamo -->
+
+<div class="top-container">
+  <p>Upload QR Code: </p>
+  <input type="file" (change)="onFileSelected($event)" accept="image/*">
+  <button class="action-button" (click)="uploadImage()">Upload</button>
+</div>
+
+<div class="container">
+  <table mat-table class="mat-elevation-z8" [dataSource]="reservations" matSort>
+    <ng-container matColumnDef="companyName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
+      <td mat-cell *matCellDef="let reservation"> {{ reservation.companyName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+      <td mat-cell *matCellDef="let reservation">{{ reservation.price }} €</td>
+    </ng-container>
+
+    <ng-container matColumnDef="start">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td mat-cell *matCellDef="let reservation">{{ formatDate(reservation.start) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="showOrder">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let reservation">
+        <button class="action-button" (click)="showReservation(reservation)">Show</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalReservations" showFirstLastButtons
+                 (page)="onPageChange($event)"></mat-paginator>
+</div>
+
+<div class="container" *ngIf="order">
+  <div class="data" *ngIf="order.isValid  && !order.isTaken">
+    <p>Customer: {{order.customer}}</p>
+    <p>Start time: {{ formatDate(order.timeslotStart) }}</p>
+    <p>End time: {{ formatDate(order.timeslotEnd) }}</p>
+    <p> No. of reservation: {{order.id}}</p>
+
+    <p>Equipment: {{order.equipment}}</p>
+
+    <div *ngIf="!order.isRightAdmin">
+      <p>Nije tvoj termin</p>
+    </div>
+
+    <button class="action-button" (click)="finishTakingOrder()">Finish Primopredaju</button>
+  </div>
+  <div *ngIf="order.isCanceled">
+    <p>QR Code je nevazeci.</p>
+  </div>
+  <div *ngIf="!order.isValid && !order.isTaken && !order.isCanceled"> <!-- ponistava order i na pogresnog admina -->
+    <p>Rok za preuzimanje je prosao, rezervacija se brise, sudija svira penal komada 2</p>
+  </div>
+  <div *ngIf="order.isTaken">
+    <p>Vec je preuzeto</p>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="notFoundQR">
+    <p>QR Code je nevazeci.</p>
+  </div>
+</div>

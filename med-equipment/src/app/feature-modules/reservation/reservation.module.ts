@@ -3,20 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ReservationHistoryComponent } from './reservation-history/reservation-history.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
-
-
+import { SharedModule } from 'src/app/shared/shared.module';
+import { PickupHistoryComponent } from './pickup-history/pickup-history.component';
+import { CustomersComponent } from './customers/customers.component';
 
 @NgModule({
   declarations: [
-    ReservationHistoryComponent
+    ReservationHistoryComponent,
+    PickupHistoryComponent,
+    CustomersComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   exports: [
-    ReservationHistoryComponent
+    ReservationHistoryComponent,
+    PickupHistoryComponent
   ]
 })
 export class ReservationModule { }

@@ -1,0 +1,67 @@
+.container {
+  margin: 24px;
+}
+
+.top-container {
+  margin: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.top-container button {
+  margin: auto 12px;
+}
+
+input[type="file"] {
+  align-content: center;
+  text-align: center;
+  margin: auto 12px;
+  font-family: Roboto, "Poppins", sans-serif;
+}
+
+.data {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.data p, button {
+  margin: 8px auto;
+}
+
+.data button {
+  width: 180px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button.mat-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+div.order {
+  margin-top: 20px;
+}
+
+
+button.finish-button {
+  background-color: #ff3333;
+  color: white;
+}

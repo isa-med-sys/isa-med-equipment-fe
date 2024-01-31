@@ -11,7 +11,9 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from "@angular/material/select";
-
+import { OrderTakingComponent } from './order-taking/order-taking.component';
+import { DeliveryComponent } from './delivery/delivery.component';
+import { ContractManagementComponent } from './contract-management/contract-management.component';
 
 
 @NgModule({
@@ -20,7 +22,10 @@ import { MatSelectModule } from "@angular/material/select";
     RegisteredUserProfileComponent,
     ChangePasswordComponent,
     CompanyAdminProfileComponent,
-    CalendarComponent
+    CalendarComponent,
+    OrderTakingComponent,
+    DeliveryComponent,
+    ContractManagementComponent
   ],
   imports: [
     CommonModule,

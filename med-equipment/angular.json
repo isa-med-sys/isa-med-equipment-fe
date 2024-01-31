@@ -30,7 +30,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           },
@@ -68,7 +69,8 @@
               "browserTarget": "med-equipment:build:production"
             },
             "development": {
-              "browserTarget": "med-equipment:build:development"
+              "browserTarget": "med-equipment:build:development",
+              "port": 4200
             }
           },
           "defaultConfiguration": "development"

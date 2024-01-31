@@ -13,23 +13,35 @@
     <p class="description">{{ company.description }}</p>
   </div>
 
-  <div class="equipment-container">
-    <h2>Available Equipment</h2>
-    <table class="equipment-table">
-      <tbody>
-        <tr *ngFor="let e of equipment" class="equipment-item">
-          <td>{{ e.name }}</td>
-          <td *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'">
-            <button (click)="addToReservation(e)" class="action-button add" title="Reserve equipment">Reserve</button>
-          </td>
-          <td *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'">
-            <button *ngIf="isEquipmentInReservations(e)" (click)="removeFromReservation(e)" class="action-button remove"
-              title="Remove from reservation">Remove</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="equipment-container">
+  <h2>Available Equipment</h2>
+  <table class="equipment-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Type</th>
+        <th *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of equipment" class="equipment-item">
+        <td>{{ e.name }}</td>
+        <td>{{ e.price }} €</td>
+        <td>{{ e.type | titlecase }}</td>
+        <td  *ngIf="e.description.length > 20">
+          <button mat-button (click)="expandDescription(e)">See More</button>
+        </td>
+        <td *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER'">
+          <button (click)="addToReservation(e)" class="action-button add" title="Reserve equipment">Reserve</button>
+          <button *ngIf="isEquipmentInReservations(e)" (click)="removeFromReservation(e)" class="action-button remove"
+            title="Remove from reservation">Remove</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
   <div *ngIf="user && user.email !== '' && user.role == 'REGISTERED_USER' && reservations && reservations.length > 0"
     class="reservation-section">
     <h2>Reservation List</h2>

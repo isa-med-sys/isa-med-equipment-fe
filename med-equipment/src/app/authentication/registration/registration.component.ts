@@ -4,6 +4,7 @@ import { Registration } from '../model/registration.model';
 import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-registration',
@@ -17,7 +18,8 @@ export class RegistrationComponent {
   constructor(
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -68,19 +70,37 @@ export class RegistrationComponent {
         streetNumber: this.registrationForm.value.address?.streetNumber ?? '',
         country: this.registrationForm.value.address?.country ?? '',
         city: this.registrationForm.value.address?.city ?? '',
+        longitude: '',
+        latitude: '',
       },
     };
 
     if (this.registrationForm.valid) {
-      this.authService.register(registration).subscribe({
-        next: () => {
-          this.openSnackBar('Registration successful! Check your email for the confirmation link.');
-          this.router.navigate(['/login']);
+      const addressString = `${registration.address.streetNumber} ${registration.address.street}, ${registration.address.city}, ${registration.address.country}`;
+  
+      this.getLatLongFromAddressOpenCage(addressString).subscribe(
+        (response: any) => {
+          if (response.results.length > 0) {
+            const latlng = response.results[0].geometry;
+            registration.address.latitude = latlng.lat;
+            registration.address.longitude = latlng.lng;
+            this.authService.register(registration).subscribe({
+              next: () => {
+                this.openSnackBar('Registration successful! Check your email for the confirmation link.');
+                this.router.navigate(['/login']);
+              },
+              error: () => {
+                this.openSnackBar('An error occurred during registration.');
+              }
+            });
+          } else {
+            console.error('Geocoding response has no results.');
+          }
         },
-        error: () => {
-          this.openSnackBar('An error occurred during registration.');
+        (error: any) => {
+          console.error('Error getting coordinates:', error);
         }
-      });
+      );
     }
   }
 
@@ -88,5 +108,12 @@ export class RegistrationComponent {
     this.snackBar.open(message, 'Close', {
       duration: 30000,
     });
+  }
+
+  private getLatLongFromAddressOpenCage(address: string) {
+    const apiKey = '7087c471f8054150abf1cd6421ae2324';
+    const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&language=en&limit=1`;
+  
+    return this.http.get(apiUrl);
   }
 }

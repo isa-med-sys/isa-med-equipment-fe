@@ -10,6 +10,9 @@ import { Equipment } from "../../shared/model/equipment";
 import { Calendar } from 'src/app/shared/model/calendar';
 import { CompanyCalendar } from 'src/app/shared/model/company-calendar';
 import { TimeSlot } from "../../shared/model/timeslot";
+import { Reservation } from 'src/app/shared/model/reservation';
+import {PagedResults} from "../../shared/model/paged-results.model";
+import { Contract } from 'src/app/shared/model/contract';
 
 @Injectable({
   providedIn: 'root'
@@ -106,5 +109,43 @@ export class AdministrationService {
   canDeleteEquipment(id: number, equipment: Equipment): Observable<boolean> {
     const params = new HttpParams().set('equipmentId', equipment.id.toString());
     return this.http.get<boolean>(environment.apiHost + `reservations/equipment-delete/${id}`, { params });
+  }
+
+  uploadImage(id: number, file: File): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/code/${id}`, file);
+  }
+
+  completeOrder(reservation: Reservation): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/complete-reservation`, reservation);
+  }
+
+  getAllOrders(companyId: number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<Reservation>> {
+    const params = this.buildParams(companyId, page, size, sortBy, sortDirection);
+    return this.http.get<PagedResults<Reservation>>(environment.apiHost + `reservations/orders`, { params });
+  }
+
+  getOrder(orderId: number, userId: number): Observable<any> {
+    return this.http.post(environment.apiHost + `reservations/order/${orderId}`, userId);
+  }
+
+  startSimulation(contractId: number): Observable<any> {
+    return this.http.get(environment.apiHost + `contracts/start/${contractId}`);
+  }
+
+  getActiveReservationsByCompany(id: number, page: number, size: number): Observable<PagedResults<Contract>> {
+    const params = this.buildParams(id, page, size);
+    return this.http.get<PagedResults<Contract>>(environment.apiHost + `contracts/active`, { params });
+  }
+
+  private buildParams(companyId: number, page: number, size: number, sortBy?: string, sortDirection?: string): HttpParams {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('companyId', companyId.toString())
+
+    if (sortBy) params.set('sort', sortBy);
+    if (sortDirection) params.set('direction', sortDirection);
+  
+    return params;
   }
 }

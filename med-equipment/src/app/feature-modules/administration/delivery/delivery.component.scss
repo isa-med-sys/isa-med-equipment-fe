@@ -1,0 +1,23 @@
+.header {
+    background-color: #f0f0f0;
+    padding: 5px;
+    text-align: center;
+}
+
+.delivery-details {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+#map {
+    height: 600px;
+    width: 70%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
